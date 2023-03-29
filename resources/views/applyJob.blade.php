@@ -1,60 +1,23 @@
 @extends('layouts.app')
-
 @section('content')
-<script src="http://code.jquery.com/jquery-1.9.1.min.js"></script>
-<script src="http://code.jquery.com/jquery-migrate-1.2.1.min.js"></script>
-<link href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/2.0.1/css/toastr.css" rel="stylesheet"/>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/2.0.1/js/toastr.js"></script>
-<script>
-        toastr.success('Successfuly Applied!');
-</script>
-<style>
-    .loading {
-	z-index: 20;
-	position: absolute;
-	top: 0;
-	left:-5px;
-	width: 100%;
-	height: 100%;
-    background-color: rgba(0,0,0,0.4);
-}
-.loading-content {
-	position: absolute;
-	border: 16px solid #f3f3f3; /* Light grey */
-	border-top: 16px solid #3498db; /* Blue */
-	border-radius: 50%;
-	width: 50px;
-	height: 50px;
-	top: 40%;
-	left:35%;
-	animation: spin 2s linear infinite;
-	}
-
-	@keyframes spin {
-		0% { transform: rotate(0deg); }
-		100% { transform: rotate(360deg); }
-	}
-</style>
-<section id="loading">
-    <div id="loading-content"></div>
-</section>
-
-<script>
- $(document).ajaxStart(function() {
-        $('#loading').addClass('loading');
-        $('#loading-content').addClass('loading-content');
-    });
-
-
-</script>
-
-    <div class="container">
-        <div class="row justify-content-center">
+    <link rel="stylesheet" href="{{ asset('css/styles.css') }}">
+    @if (session()->has('error'))
+        <script>
+            toastr.success('{{ session('error') }}');
+        </script>
+    @endif
+    @if (session()->has('success'))
+        <script>
+            toastr.success('{{ session('success') }}');
+        </script>
+    @endif
+    <div class="container " id="one">
+        <div class="row justify-content-center ">
             <div class="col-md-8">
-                <div class="card">
-                    <div class="card-header">{{ __('Apply Job') }}</div>
+                <div class="card h-75">
+                    <div class="card-header overflow-auto">{{ __('Apply Job') }}</div>
 
-                    <div class="card-body overflow-auto">
+                    <div class="card-body  overflow-auto">
                         <form method="POST" action="{{ route('applyjob') }}">
                             @csrf
 
@@ -65,7 +28,7 @@
                                 <div class="col-md-6">
                                     <input id="first_name" type="text"
                                         class="form-control @error('first_name') is-invalid @enderror" name="first_name"
-                                        value="{{ old('first_name') }}"  autocomplete="first_name" autofocus>
+                                        value="{{ old('first_name') }}" autocomplete="first_name" autofocus>
 
                                     @error('first_name')
                                         <span class="invalid-feedback" role="alert">
@@ -81,7 +44,7 @@
                                 <div class="col-md-6">
                                     <input id="last_name" type="text"
                                         class="form-control @error('last_name') is-invalid @enderror" name="last_name"
-                                        value="{{ old('last_name') }}"  autocomplete="last_name" autofocus>
+                                        value="{{ old('last_name') }}" autocomplete="last_name" autofocus>
 
                                     @error('last_name')
                                         <span class="invalid-feedback" role="alert">
@@ -98,7 +61,7 @@
                                 <div class="col-md-6">
                                     <input id="email" type="email"
                                         class="form-control @error('email') is-invalid @enderror" name="email"
-                                        value="{{ old('email') }}"  autocomplete="email" autofocus>
+                                        value="{{ old('email') }}" autocomplete="email" autofocus>
 
                                     @error('email')
                                         <span class="invalid-feedback" role="alert">
@@ -114,7 +77,7 @@
                                 <div class="col-md-6">
                                     <input id="age" type="text"
                                         class="form-control @error('age') is-invalid @enderror" name="age"
-                                        value="{{ old('age') }}"  autocomplete="age" autofocus>
+                                        value="{{ old('age') }}" autocomplete="age" autofocus>
 
                                     @error('age')
                                         <span class="invalid-feedback" role="alert">
@@ -131,7 +94,7 @@
                                 <div class="col-md-6">
                                     <input id="sex" type="text"
                                         class="form-control @error('sex') is-invalid @enderror" name="sex"
-                                        value="{{ old('sex') }}"  autocomplete="sex" autofocus>
+                                        value="{{ old('sex') }}" autocomplete="sex" autofocus>
 
                                     @error('sex')
                                         <span class="invalid-feedback" role="alert">
@@ -147,7 +110,7 @@
                                 <div class="col-md-6">
                                     <input id="phone" type="text"
                                         class="form-control @error('phone') is-invalid @enderror" name="phone"
-                                        value="{{ old('phone') }}"  autocomplete="phone" autofocus>
+                                        value="{{ old('phone') }}" autocomplete="phone" autofocus>
 
                                     @error('phone')
                                         <span class="invalid-feedback" role="alert">
@@ -163,7 +126,7 @@
                                 <div class="col-md-6">
                                     <input id="level" type="text"
                                         class="form-control @error('level') is-invalid @enderror" name="level"
-                                        value="{{ old('level') }}"  autocomplete="level" autofocus>
+                                        value="{{ old('level') }}" autocomplete="level" autofocus>
 
                                     @error('level')
                                         <span class="invalid-feedback" role="alert">
@@ -180,7 +143,7 @@
                                 <div class="col-md-6">
                                     <input id="GPA" type="text"
                                         class="form-control @error('GPA') is-invalid @enderror" name="GPA"
-                                        value="{{ old('GPA') }}"  autocomplete="first_name" autofocus>
+                                        value="{{ old('GPA') }}" autocomplete="first_name" autofocus>
 
                                     @error('GPA')
                                         <span class="invalid-feedback" role="alert">
@@ -197,7 +160,7 @@
                                 <div class="col-md-6">
                                     <input id="attachment" type="file"
                                         class="form-control @error('attachment') is-invalid @enderror" name="attachment"
-                                        value="{{ old('attachment') }}"  autocomplete="attachment" autofocus>
+                                        value="{{ old('attachment') }}" autocomplete="attachment" autofocus>
 
                                     @error('attachment')
                                         <span class="invalid-feedback" role="alert">
@@ -214,7 +177,7 @@
                                 <div class="col-md-6">
                                     <input id="numberofdoc" type="number"
                                         class="form-control @error('numberofdoc') is-invalid @enderror" name="numberofdoc"
-                                        value="{{ old('numberofdoc') }}"  autocomplete="numberofdoc" autofocus>
+                                        value="{{ old('numberofdoc') }}" autocomplete="numberofdoc" autofocus>
 
                                     @error('numberofdoc')
                                         <span class="invalid-feedback" role="alert">
@@ -231,7 +194,7 @@
                                 <div class="col-md-6">
                                     <input id="remark" type="text"
                                         class="form-control @error('remark') is-invalid @enderror" name="remark"
-                                        value="{{ old('remark') }}"  autocomplete="remark" autofocus>
+                                        value="{{ old('remark') }}" autocomplete="remark" autofocus>
 
                                     @error('remark')
                                         <span class="invalid-feedback" role="alert">
@@ -243,40 +206,36 @@
 
                             <div class="row mb-0">
                                 <div class="col-md-8 offset-md-4">
-                                    <button type="submit" class="btn btn-primary">
+                                    <button onclick="loadDoc()" type="submit" class="btn btn-primary">
                                         {{ __('Apply') }}
                                     </button>
-
-                                </div>
-
-                            </div>
-                            <div class="row mb-3">
-                                @if ($errors->any())
-                                    <div class="col-md-6">
-                                        @foreach ($errors as $er)
-                                            <div class="alert alert-danger">{{ $er }}</div>
-                                        @endforeach
-                                    </div>
-                                @endif
-                                <div class="ms-5 mt-4 col-md-6 ffset-md-4">
-                                    @if (session()->has('error'))
-                                        <div class="alert alert-danger">{{ session('error') }}</div>
-                                    @endif
-                                    @if (session()->has('success'))
-                                        <div class="alert alert-success">{{ session('error') }}</div>
-                                    @endif
                                 </div>
                             </div>
+                        </form>
                     </div>
-                    </form>
                 </div>
             </div>
         </div>
     </div>
-    </div>
+    <script>
+        function loadDoc() {
+            document.getElementById("demo").style.visibility = 'visible';
+            document.getElementById("one").style.visibility = 'hidden';
+            const xhttp =
+                new XMLHttpRequest(); //! A browser built-in XMLHttpRequest object (to request data from a web server).
+            xhttp.onreadystatechange = function() {
+                // A callback function is a function passed as a parameter to another function.
+                if (this.readyState == 4 && this.status == 200) {
 
-
-
-
-
+                    document.getElementById("one").style.visibility = 'visible';
+                    document.getElementById("demo").style.visibility = 'hidden';
+                }
+            };
+            xhttp.open("POST", "{{ route('applyjob') }}");
+            xhttp.send();
+        }
+    </script>
+    <section id="demo" style="visibility: hidden;">
+        <div class="spinner spinner--steps icon-spinner" aria-hidden="true"></div>
+    </section>
 @endsection

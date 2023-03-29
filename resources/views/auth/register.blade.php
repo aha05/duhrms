@@ -1,5 +1,4 @@
 @extends('layouts.app')
-
 @section('content')
 <div class="container">
     <div class="row justify-content-center">
@@ -66,7 +65,7 @@
                         <div class="row mb-0">
                             <div class="col-md-8 offset-md-4">
                                 <button type="submit" class="btn btn-primary">
-                                    {{ __('Login') }}
+                                    {{ __('Register') }}
                                 </button>
 
                                 @if (Route::has('password.request'))
@@ -76,22 +75,6 @@
                                 @endif
                             </div>
                         </div>
-                        <div class="row mb-3">
-                            @if ($errors->any())
-                                <div class="col-md-6">
-                                    @foreach ($errors as $er)
-                                        <div class="alert alert-danger">{{ $er }}</div>
-                                    @endforeach
-                                </div>
-                            @endif
-                            <div class="ms-5 mt-4 col-md-6 ffset-md-4">
-                                @if (session()->has('error'))
-                                    <div class="alert alert-danger">{{ session('error') }}</div>
-                                @endif
-                                @if (session()->has('success'))
-                                    <div class="alert alert-success">{{ session('error') }}</div>
-                                @endif
-                            </div>
                     </form>
                 </div>
             </div>
