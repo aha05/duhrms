@@ -33,6 +33,6 @@ class RegistrationController extends Controller
             return redirect('register')->with('error', 'Registration Failed!');
         }
 
-        return redirect('login')->with('success', 'registration successful!');
+        return back()->with('success', 'registration successful!');
     }
 }

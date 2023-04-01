@@ -8,7 +8,7 @@ class AdminController extends Controller
 {
     public function __construct()
     {
-        $this->middleware('IsAdmin'); //! tasks that need to happen when a class is instantiated.
+        // $this->middleware('IsAdmin'); //! tasks that need to happen when a class is instantiated.
     }
 
     public function index(){

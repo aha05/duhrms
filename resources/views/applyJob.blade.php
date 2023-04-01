@@ -3,7 +3,7 @@
     <link rel="stylesheet" href="{{ asset('css/styles.css') }}">
     @if (session()->has('error'))
         <script>
-            toastr.success('{{ session('error') }}');
+            toastr.error('{{ session('error') }}');
         </script>
     @endif
     @if (session()->has('success'))

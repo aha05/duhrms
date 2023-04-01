@@ -4,9 +4,8 @@ namespace App\Http\Middleware;
 
 use Closure;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
 
-class IsAdmin
+class RoleMiddleware
 {
     /**
      * Handle an incoming request.
@@ -15,13 +14,11 @@ class IsAdmin
      * @param  \Closure(\Illuminate\Http\Request): (\Illuminate\Http\Response|\Illuminate\Http\RedirectResponse)  $next
      * @return \Illuminate\Http\Response|\Illuminate\Http\RedirectResponse
      */
-    public function handle(Request $request, Closure $next)
+    public function handle(Request $request, Closure $next, $role)
     {
-        if (Auth::user() &&  Auth::user()->userHasRole('Admin') == 1)
-        {
-            return $next($request);
+        if(!$request->user()->userHasRole($role)){
+            abort(403, 'You are not Authorized');
         }
-
-      return redirect('/');
+        return $next($request);
     }
 }

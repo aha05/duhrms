@@ -1,9 +1,9 @@
-<ul class="navbar-nav bg-gradient-primary sidebar sidebar-dark accordion" id="accordionSidebar">
+<ul class="navbar-nav bg-gradient-dark sidebar sidebar-dark accordion" id="accordionSidebar">
 
     <!-- Sidebar - Brand -->
     <a class="sidebar-brand d-flex align-items-center justify-content-center" href="index.html">
         <div class="sidebar-brand-icon mr-2 d-none small">
-            <img  class="img-profile rounded-circle" src="{{ asset("img/icon.webp") }}"/>
+            <i class="bi bi-person-fill-gear"></i>
         </div>
         <div class="sidebar-brand-text mx-3">DUHRMS</div>
     </a>
@@ -13,7 +13,7 @@
 
     <!-- Nav Item - Dashboard -->
     <li class="nav-item">
-        <a class="nav-link" href="index.html">
+        <a class="nav-link" href="{{ route('admin') }}">
             <i class="fas fa-fw fa-tachometer-alt"></i>
             <span>Dashboard</span></a>
     </li>
@@ -97,12 +97,13 @@
     </li>
 
     <!-- Nav Item - Tables -->
-    <li class="nav-item">
-        <a class="nav-link" href="tables.html">
-            <i class="fas fa-fw fa-table"></i>
-            <span>Tables</span></a>
-    </li>
-
+    @if (auth()->user()->userHasRole('Admin'))
+        <li class="nav-item">
+            <a class="nav-link" href="{{ route('account') }}">
+                <i class="fas fa-fw fa-table"></i>
+                <span>User Account</span></a>
+        </li>
+    @endif
     <!-- Divider -->
     <hr class="sidebar-divider d-none d-md-block">
 
@@ -111,4 +112,3 @@
         <button class="rounded-circle border-0" id="sidebarToggle"></button>
     </div>
 </ul>
-
