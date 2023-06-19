@@ -1,6 +1,32 @@
-@extends('layouts.app')
-@section('content')
-@if (session()->has('error'))
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>login</title>
+
+    <link rel="stylesheet" type="text/css" href="{{ asset('assets/css/login.css') }}">
+    <link rel="stylesheet" type="text/css" href="{{ asset('assets/css/style.css') }}">
+    <link href="https://fonts.googleapis.com/css?family=Poppins:600&display=swap" rel="stylesheet">
+    <script src="https://kit.fontawesome.com/a81368914c.js"></script>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <title>apply</title>
+    <meta content="" name="description">
+    <meta content="" name="keywords">
+    <!-- Favicons -->
+    <link href="{{ asset('assets/img/dulogoNew_2.png') }}" rel="icon">
+
+    <!-- Scripts -->
+    <script src="{{ asset('js/bootstraps.js') }}"></script>
+    <script src="{{ asset('toaster/jquery-1.91.js') }}"></script>
+    <script src="{{ asset('toaster/jquery-migrate.js') }}"></script>
+    <link href="{{ asset('toaster/toaster.css') }}" rel="stylesheet" />
+    <script src="{{ asset('toaster/toaster.js') }}"></script>
+
+</head>
+
+<body>
+    @if (session()->has('error'))
         <script>
             toastr.error('{{ session('error') }}');
         </script>
@@ -10,100 +36,73 @@
             toastr.success('{{ session('success') }}');
         </script>
     @endif
-    <div class="container">
-        <div class="row justify-content-center">
-            <div class="col-md-8">
-                <div class="card">
-                    <div class="card-header">{{ __('Login') }}</div>
+    <header id="header" class="fixed-top d-flex align-items-center">
+        <div class="container d-flex justify-content-between align-items-center">
 
-                    <div class="card-body">
-                        <form method="POST" action="{{ route('login') }}">
-                            @csrf
+            <div class="logo">
+                <h1><a href="{{route('home')}}">Back to home</a></h1>
 
-                            <div class="row mb-3">
-                                <label for="email"
-                                    class="col-md-4 col-form-label text-md-end">{{ __('Email Address') }}</label>
-
-                                <div class="col-md-6">
-                                    <input id="email" type="email"
-                                        class="form-control @error('email') is-invalid @enderror" name="email"
-                                        value="{{ old('email') }}"  autocomplete="email" autofocus>
-
-                                    @error('email')
-                                        <span class="invalid-feedback" role="alert">
-                                            <strong>{{ $message }}</strong>
-                                        </span>
-                                    @enderror
-                                </div>
-                            </div>
-
-                            <div class="row mb-3">
-                                <label for="password"
-                                    class="col-md-4 col-form-label text-md-end">{{ __('Password') }}</label>
-
-                                <div class="col-md-6">
-                                    <input id="password" type="password"
-                                        class="form-control @error('password') is-invalid @enderror" name="password"
-                                         autocomplete="current-password">
-
-                                    @error('password')
-                                        <span class="invalid-feedback" role="alert">
-                                            <strong>{{ $message }}</strong>
-                                        </span>
-                                    @enderror
-                                </div>
-                            </div>
-
-                            <div class="row mb-3">
-                                <div class="col-md-6 offset-md-4">
-                                    <div class="form-check">
-                                        <input class="form-check-input" type="checkbox" name="remember" id="remember"
-                                            {{ old('remember') ? 'checked' : '' }}>
-
-                                        <label class="form-check-label" for="remember">
-                                            {{ __('Remember Me') }}
-                                        </label>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <div class="row mb-0">
-                                <div class="col-md-8 offset-md-4">
-                                    <button type="submit" class="btn btn-primary">
-                                        {{ __('Login') }}
-                                    </button>
-
-                                    @if (Route::has('password.request'))
-                                        <a class="btn btn-link" href="{{ route('password.request') }}">
-                                            {{ __('Forgot Your Password?') }}
-                                        </a>
-                                    @endif
-
-                                </div>
-
-                            </div>
-                            <div class="row mb-3">
-                                @if ($errors->any())
-                                    <div class="col-md-6">
-                                        @foreach ($errors as $er)
-                                            <div class="alert alert-danger">{{ $er }}</div>
-                                        @endforeach
-                                    </div>
-                                @endif
-                                <div class="ms-5 mt-4 col-md-6 ffset-md-4">
-                                    @if (session()->has('error'))
-                                        <div class="alert alert-danger">{{ session('error') }}</div>
-                                    @endif
-                                    @if (session()->has('success'))
-                                        <div class="alert alert-success">{{ session('error') }}</div>
-                                    @endif
-                                </div>
-                            </div>
-                    </div>
-                    </form>
-                </div>
+                <a href="index.html"><img src="{{ asset('assets/img/person_1.png') }}" alt=""
+                        class="img-fluid"></a>
             </div>
+
+            <nav id="navbar" class="navbar">
+
+                <i class="bi bi-list mobile-nav-toggle"></i>
+            </nav>
+            <!-- .navbar -->
+
+        </div>
+    </header><!-- End Header -->
+
+
+    <img class="wave" src="{{ asset('img/wave.png') }}">
+    <div class="container">
+        <div class="img">
+            <img src="{{ asset('img/addlog.png') }}">
+        </div>
+        <div class="login-content">
+            <form method="POST" action="{{ route('login') }}">
+                @csrf
+
+                <img src="{{ asset('img/adicon.gif') }}">
+                <h2 class="title">Welcome</h2>
+                <div class="input-div one">
+                    <div class="i">
+                        <i class="fas fa-user"></i>
+                    </div>
+                    <div class="div">
+                        <h5>Email</h5>
+                        <input type="email" id="email" class="input @error('email') is-invalid @enderror"
+                            name="email" value="{{ old('email') }}" autocomplete="email" autofocus>
+                        @error('email')
+                            <span class="invalid-feedback" role="alert">
+                                <strong>{{ $message }}</strong>
+                            </span>
+                        @enderror
+                    </div>
+                </div>
+                <div class="input-div pass">
+                    <div class="i">
+                        <i class="fas fa-lock"></i>
+                    </div>
+                    <div class="div">
+                        <h5>Password</h5>
+                        <input id="password" type="password" class="input @error('password') is-invalid @enderror"
+                            name="password" autocomplete="current-password">
+
+                        @error('password')
+                            <span class="invalid-feedback" role="alert">
+                                <strong>{{ $message }}</strong>
+                            </span>
+                        @enderror
+                    </div>
+                </div>
+                <button type="submit" class="btn">{{ __('Login') }}</button>
+            </form>
         </div>
     </div>
-    </div>
-@endsection
+    <script type="text/javascript" src="{{ asset('assets/js/login.js') }}"></script>
+</body>
+
+</html>

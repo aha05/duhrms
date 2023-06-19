@@ -21,7 +21,7 @@ return new class extends Migration
             $table->text('content')->nullable();
             $table->date('start_date');
             $table->date('end_date');
-            $table->date('requested_date');
+            $table->date('requested_date')->default(now()->format('Y-m-d'));;
             $table->softDeletes();
             $table->timestamps();
         });

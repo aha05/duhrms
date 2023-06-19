@@ -3,11 +3,12 @@
 namespace App\Models;
 
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
+use Illuminate\Support\Str;
+use Laravel\Sanctum\HasApiTokens;
+use Illuminate\Support\Facades\Crypt;
+use Illuminate\Notifications\Notifiable;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
-use Illuminate\Notifications\Notifiable;
-use Laravel\Sanctum\HasApiTokens;
-use Illuminate\Support\Str;
 
 class User extends Authenticatable
 {
@@ -52,7 +53,7 @@ class User extends Authenticatable
 
     public function getAvatarAttribute($value)
     {
-        return asset('storage/images/'.$value);
+        return asset('storage/images/' . $value);
     }
 
     public function permissions()
@@ -65,12 +66,27 @@ class User extends Authenticatable
         return $this->belongsToMany(Role::class);
     }
 
-    public function userHasRole($role_name){
-        foreach($this->roles as $role){
-            if(Str::lower($role_name) == Str::lower($role->name))
+    public function userHasRole($role_name)
+    {
+        foreach ($this->roles as $role) {
+            if (Str::lower($role_name) == Str::lower($role->name))
                 return true;
         }
         return false;
     }
 
+    public function employee()
+    {
+        return $this->belongsTo(Employee::class);
+    }
+
+    public function leaveApprovals()
+    {
+        return $this->hasMany(LeaveApproval::class, 'approver_id');
+    }
+
+    public function departments()
+    {
+        return $this->belongsToMany(Department::class, 'users_department');
+    }
 }

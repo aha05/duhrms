@@ -2,16 +2,24 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
+use App\Models\User;
 use \App\Models\PostJob;
 use \App\Models\ApplyJOb;
-
+use App\Notifications\AdminNotifications;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Notification;
+use Illuminate\Support\Facades\Auth;
+use Carbon\Carbon;
 
 class JobController extends Controller
 {
     public function index()
     {
-        $posts = PostJob::latest()->paginate(3);
+        // $posts = PostJob::where('end_date', '>=', Carbon::now())
+        //     ->orderBy('created_at', 'desc')
+        //    ->get();
+
+        $posts = PostJob::latest()->where('end_date', '>=', Carbon::now())->paginate(3);
         return view('applypage', compact('posts'));
     }
 
@@ -26,8 +34,8 @@ class JobController extends Controller
          $request->validate([
             'first_name' => 'required|alpha',
             'last_name'=>'required|alpha',
-            'age'=>'required|integer:18,150',
-            'sex'=>'required|in:male,female',
+            'age'=>'required|integer|between:18,150',
+            'sex'=>'required|in:male,female,F,M',
             'phone'=>'required|numeric|digits:10|unique:apply_for_job',
             'level'=>'required|in:phd,msc,bsc',
             'GPA'=>'required|between:2,4.00',
@@ -48,6 +56,12 @@ class JobController extends Controller
         $data['remark'] = $request->remark;
         $data['email'] = $request->email;
         $success = ApplyJOb::create($data);
+
+        // $user = User::user()->userHasRole('Admin');
+        // if(Auth::user()->userHasRole('Admin')==1){
+        //     Notification::send($user, new AdminNotifications($request->first_name, Auth::user()->role));
+        // }
+
         if($success){
             return redirect('applyjob')->with('success', 'apply successfully!');
         }
@@ -56,10 +70,7 @@ class JobController extends Controller
         }
     }
 
-    public function postjobGet()
-    {
-        return view('postJop');
-    }
+
     public function postjobPost(Request $request)
     {
         // $request->validate([
@@ -79,16 +90,11 @@ class JobController extends Controller
         $data['end_date'] = $request->end_date;
         $success = PostJob::create($data);
         if($success){
-            return redirect('postjob')->with('success', 'apply successfully!');
+            return back()->with('success', 'succeeded!');
         }
         else{
-            return redirect('postjob')->with('error', 'registration failed!');
+            return back()->with('error', 'failed!');
         }
-    }
-
-    public function announcementGet()
-    {
-       return view('announcement');
     }
 
 }

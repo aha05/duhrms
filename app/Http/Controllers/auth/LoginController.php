@@ -2,12 +2,13 @@
 
 namespace App\Http\Controllers\auth;
 
-use App\Http\Controllers\Controller;
 use App\Models\User;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
+use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Auth;
 use App\Providers\RouteServiceProvider;
 use Illuminate\Contracts\Session\Session;
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
 
 class LoginController extends Controller
 {
@@ -41,16 +42,18 @@ class LoginController extends Controller
         $this->middleware('guest')->except('logout');
     }
 
-    public function index(){
+    public function index()
+    {
 
         return view('auth.login');
     }
 
-    public function logInto(Request $request){
+    public function logInto(Request $request)
+    {
 
         $credentials = $request->validate([
-            'email'=>'required',
-            'password'=>'required',
+            'email' => 'required',
+            'password' => 'required',
         ]);
 
         if (Auth::attempt($credentials)) {
@@ -64,9 +67,8 @@ class LoginController extends Controller
 
     public function logout()
     {
-       session()->flush();
-       Auth::logout();
-       return redirect('login');
+        session()->flush();
+        Auth::logout();
+        return redirect('login');
     }
-
 }

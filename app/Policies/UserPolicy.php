@@ -29,7 +29,7 @@ class UserPolicy
      */
     public function view(User $user, User $model)
     {
-        return $user->userHasRole('admin') ?: $user->id == $model->id; //? "?:" means "OR" operator 
+        return true;
     }
 
     /**

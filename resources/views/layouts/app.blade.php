@@ -13,18 +13,37 @@
     <!-- Fonts -->
     <link rel="dns-prefetch" href="//fonts.gstatic.com">
     <link href="https://fonts.bunny.net/css?family=Nunito" rel="stylesheet">
+    <link rel="stylesheet"
+        href="https://maxst.icons8.com/vue-static/landings/line-awesome/line-awesome/1.3.0/css/line-awesome.min.css">
+
+    <link rel="stylesheet" href="{{ asset('css/styles.css') }}">
 
     <!-- Scripts -->
     <link rel="stylesheet" href="{{ asset('css/bootstrap.css') }}">
     <script src="{{ asset('js/bootstraps.js') }}"></script>
-    <script src="http://code.jquery.com/jquery-1.9.1.min.js"></script>
-    <script src="http://code.jquery.com/jquery-migrate-1.2.1.min.js"></script>
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/2.0.1/css/toastr.css" rel="stylesheet" />
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/2.0.1/js/toastr.js"></script>
+    <script src="{{ asset('toaster/jquery-1.91.js') }}"></script>
+    <script src="{{ asset('toaster/jquery-migrate.js') }}"></script>
+    <link href="{{ asset('toaster/toaster.css') }}" rel="stylesheet" />
+    <script src="{{ asset('toaster/toaster.js') }}"></script>
+
+
+
+
 </head>
 
 <body>
+    <script>
+        jQuery(window).load(function() {
+            // will first fade out the loading animation
+            jQuery("#status").fadeOut();
+            // will fade out the whole DIV that covers the website.
+            jQuery("#preloader").delay(100).fadeOut("slow");
+        })
+    </script>
     <div id="app">
+        {{-- <div id="preloader">
+            <div class="spinner spinner--steps icon-spinner"></div>
+        </div> --}}
         <nav class="navbar navbar-expand-md navbar-light bg-white shadow-sm">
             <div class="container">
                 <a class="navbar-brand" href="{{ url('/') }}">
@@ -41,10 +60,10 @@
                     <ul class="navbar-nav me-auto">
                         <li><a href="{{ route('home') }}" class="nav-link px-2 text-secondary active">Home</a></li>
                         <li><a href="{{ route('applypage') }}" class="nav-link px-2 text-warning">Apply Job</a></li>
-                        <li><a href="{{ route('announcement') }}" class="nav-link px-2 text-dark">Announcement</a></li>
+
                         @if (Auth::check())
                             @if (auth()->user()->userHasRole('Admin'))
-                                <li><a href="#" class="nav-link px-2 text-dark">About</a></li>
+                                <li><a href="{{ route('about') }}" class="nav-link px-2 text-dark">About</a></li>
                             @endif
                         @endif
                     </ul>
@@ -66,12 +85,6 @@
                             @if (Route::has('login'))
                                 <li class="nav-item">
                                     <a class="nav-link" href="{{ route('login') }}">{{ __('Login') }}</a>
-                                </li>
-                            @endif
-
-                            @if (Route::has('register'))
-                                <li class="nav-item">
-                                    <a class="nav-link" href="{{ route('register') }}">{{ __('Register') }}</a>
                                 </li>
                             @endif
                         @else

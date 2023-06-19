@@ -35,6 +35,13 @@ class RouteServiceProvider extends ServiceProvider
 
             Route::middleware('web')
                 ->group(base_path('routes/web/web.php'));
+
+            Route::middleware('web')
+                ->group(base_path('routes/web/admin.php')); //! Newly added route.
+
+            Route::middleware(['web', 'auth'])
+                ->prefix('user') //you can use prefix and remove this prefix /"user"/{user}/profile from user route
+                ->group(base_path('routes/web/user.php')); //! Newly added route.
         });
     }
 

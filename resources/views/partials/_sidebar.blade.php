@@ -17,48 +17,47 @@
             <i class="fas fa-fw fa-tachometer-alt"></i>
             <span>Dashboard</span></a>
     </li>
-
-    <!-- Divider -->
-    <hr class="sidebar-divider">
-
-    <!-- Heading -->
-    <div class="sidebar-heading">
-        Interface
-    </div>
-
-    <!-- Nav Item - Pages Collapse Menu -->
-    <li class="nav-item">
-        <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseTwo"
-            aria-expanded="true" aria-controls="collapseTwo">
-            <i class="fas fa-fw fa-cog"></i>
-            <span>Components</span>
-        </a>
-        <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
-            <div class="bg-white py-2 collapse-inner rounded">
-                <h6 class="collapse-header">Custom Components:</h6>
-                <a class="collapse-item" href="buttons.html">Buttons</a>
-                <a class="collapse-item" href="cards.html">Cards</a>
-            </div>
+    @if (auth()->user()->userHasRole('Admin'))
+        <!-- Divider -->
+        <hr class="sidebar-divider">
+        <!-- Heading -->
+        <div class="sidebar-heading">
+            Interface
         </div>
-    </li>
+        @can('view', Auth::user())
+            <li class="nav-item">
+                <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseUser"
+                    aria-expanded="true" aria-controls="collapseUser">
+                    <i class="fa fa-user"></i>
+                    <span>User Account</span>
+                </a>
+                <div id="collapseUser" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
+                    <div class="bg-white py-2 collapse-inner rounded">
+                        <h6 class="collapse-header">Custom Components:</h6>
+                        <a class="collapse-item" href="{{ route('account', Auth::user()) }}">All User</a>
+                        <a class="collapse-item" href="{{ route('register') }}">Register</a>
+                    </div>
+                </div>
+            </li>
+        @endcan
 
-    <!-- Nav Item - Utilities Collapse Menu -->
-    <li class="nav-item">
-        <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseUtilities"
-            aria-expanded="true" aria-controls="collapseUtilities">
-            <i class="fas fa-fw fa-wrench"></i>
-            <span>Utilities</span>
-        </a>
-        <div id="collapseUtilities" class="collapse" aria-labelledby="headingUtilities" data-parent="#accordionSidebar">
-            <div class="bg-white py-2 collapse-inner rounded">
-                <h6 class="collapse-header">Custom Utilities:</h6>
-                <a class="collapse-item" href="utilities-color.html">Colors</a>
-                <a class="collapse-item" href="utilities-border.html">Borders</a>
-                <a class="collapse-item" href="utilities-animation.html">Animations</a>
-                <a class="collapse-item" href="utilities-other.html">Other</a>
+        <li class="nav-item">
+            <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseAuthorization"
+                aria-expanded="true" aria-controls="collapseAuthorization">
+                <i class="fa fa-user-shield"></i>
+                <span>Roles & Permissions</span>
+            </a>
+            <div id="collapseAuthorization" class="collapse" aria-labelledby="headingUtilities"
+                data-parent="#accordionSidebar">
+                <div class="bg-white py-2 collapse-inner rounded">
+                    <h6 class="collapse-header">Custom Authorization:</h6>
+                    <a class="collapse-item" href="{{ route('roles.index') }}"> Create Role</a>
+                    <a class="collapse-item" href="{{ route('permissions.index') }}">Permissions</a>
+                    <a class="collapse-item" href="{{ route('roles.all') }}">All Roles</a>
+                </div>
             </div>
-        </div>
-    </li>
+        </li>
+    @endif
 
     <!-- Divider -->
     <hr class="sidebar-divider">
@@ -69,41 +68,101 @@
     </div>
 
     <!-- Nav Item - Pages Collapse Menu -->
-    <li class="nav-item ">
-        <a class="nav-link" href="#" data-toggle="collapse" data-target="#collapsePages" aria-expanded="true"
-            aria-controls="collapsePages">
-            <i class="fas fa-fw fa-folder"></i>
-            <span>Pages</span>
+    <!-- Nav Item - Pages Collapse Menu -->
+    <li class="nav-item">
+        <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseTwo"
+            aria-expanded="true" aria-controls="collapseTwo">
+            <i class="fas fa-fw fa-table"></i>
+            <span>Employee Info</span>
         </a>
-        <div id="collapsePages" class="collapse" aria-labelledby="headingPages" data-parent="#accordionSidebar">
+        <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
             <div class="bg-white py-2 collapse-inner rounded">
-                <h6 class="collapse-header">Login Screens:</h6>
-                <a class="collapse-item" href="login.html">Login</a>
-                <a class="collapse-item" href="register.html">Register</a>
-                <a class="collapse-item" href="forgot-password.html">Forgot Password</a>
-                <div class="collapse-divider"></div>
-                <h6 class="collapse-header">Other Pages:</h6>
-                <a class="collapse-item" href="404.html">404 Page</a>
-                <a class="collapse-item active" href="blank.html">Blank Page</a>
+                <h6 class="collapse-header">Custom Components:</h6>
+                <a class="collapse-item" href="{{ route('employee') }}">All Employees</a>
+                <a class="collapse-item" href="{{ route('register.employee') }}">Register</a>
+            </div>
+        </div>
+    </li>
+    <li class="nav-item">
+        <a class="nav-link" href="{{ route('department') }}">
+            <i class="fas fa-briefcase"></i>
+            <span>Department</span></a>
+    </li>
+    <li class="nav-item">
+        <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseLeave"
+            aria-expanded="true" aria-controls="collapseLeave">
+            <i class="fas fa-user-times"></i>
+            <span>Leave</span>
+        </a>
+        <div id="collapseLeave" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
+            <div class="bg-white py-2 collapse-inner rounded">
+                <h6 class="collapse-header">Custom Components:</h6>
+                <a class="collapse-item" href="{{ route('leave.request.form') }}">Apply Leave</a>
+                <a class="collapse-item" href="{{ route('leaves.history') }}">Leave Hestroy</a>
+                @if (auth()->user()->userHasRole('Admin'))
+                    <a class="collapse-item" href="{{ route('leaves') }}">All Leave</a>
+                    <a class="collapse-item" href="{{ route('leave.types') }}">Leave Type</a>
+                    <a class="collapse-item" href="{{ route('leave.pending') }}">Pending Leave</a>
+                    <a class="collapse-item" href="{{ route('leave.approved') }}">Approved Leave</a>
+                    <a class="collapse-item" href="{{ route('leave.rejected') }}">Rejected Leave</a>
+                @endif
             </div>
         </div>
     </li>
 
-    <!-- Nav Item - Charts -->
+    @can('view', Auth::user())
+        <li class="nav-item">
+            <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseVacany"
+                aria-expanded="true" aria-controls="collapseUser">
+                <i class="fas fa-suitcase"></i>
+                <span>Vacancy</span>
+            </a>
+            <div id="collapseVacany" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
+                <div class="bg-white py-2 collapse-inner rounded">
+                    <h6 class="collapse-header">Vacancy Components:</h6>
+                    <a class="collapse-item" href="{{ route('vacancy-requests.index') }}">Vacancies</a>
+                    <a class="collapse-item" href="{{route('vacancy-requests.create') }}">Apply</a>
+                </div>
+            </div>
+        </li>
+    @endcan
     <li class="nav-item">
-        <a class="nav-link" href="charts.html">
-            <i class="fas fa-fw fa-chart-area"></i>
-            <span>Charts</span></a>
+        <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseReport"
+            aria-expanded="true" aria-controls="collapseReport">
+            <i class="fas fa-file"></i>
+            <span>Report</span>
+        </a>
+        <div id="collapseReport" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
+            <div class="bg-white py-2 collapse-inner rounded">
+                <h6 class="collapse-header">Custom Components:</h6>
+                <a class="collapse-item" href="{{ route('report') }}">Generate Report</a>
+                <a class="collapse-item" href="#">View Report</a>
+            </div>
+        </div>
     </li>
 
-    <!-- Nav Item - Tables -->
-    @if (auth()->user()->userHasRole('Admin'))
-        <li class="nav-item">
-            <a class="nav-link" href="{{ route('account') }}">
-                <i class="fas fa-fw fa-table"></i>
-                <span>User Account</span></a>
-        </li>
-    @endif
+    {{-- <!-- Nav Item - Charts -->
+    <li class="nav-item">
+        <a class="nav-link" href="{{ route('chart') }}">
+            <i class="fas fa-fw fa-chart-area"></i>
+            <span>Charts</span></a>
+    </li> --}}
+
+    <li class="nav-item">
+        <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseAnn"
+            aria-expanded="true" aria-controls="collapseAnn">
+            <i class="fas fa-bullhorn"></i>
+            <span>Announcement</span>
+        </a>
+        <div id="collapseAnn" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
+            <div class="bg-white py-2 collapse-inner rounded">
+                <h6 class="collapse-header">Custom Components:</h6>
+                <a class="collapse-item" href="{{ route('report') }}">Post Job</a>
+                <a class="collapse-item" href="#">Post Sc.Info</a>
+            </div>
+        </div>
+    </li>
+
     <!-- Divider -->
     <hr class="sidebar-divider d-none d-md-block">
 

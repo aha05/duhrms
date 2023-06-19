@@ -3,6 +3,8 @@
 use App\Models\User;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
+use App\Models\Person;
+use App\Models\Department;
 
 /*
 |--------------------------------------------------------------------------
@@ -22,27 +24,26 @@ Route::get('/logout', [App\Http\Controllers\auth\LoginController::class, 'logout
 Route::post('/logout', [App\Http\Controllers\auth\LoginController::class, 'logout'])->name('logout');
 
 Route::get('/', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
-Route::get('/admin', [App\Http\Controllers\AdminController::class, 'index'])->middleware('auth')->name('admin');
 
 
 Route::get('/applyjob', [App\Http\Controllers\JobController::class, 'applyJobGet'])->name('applyjob');
 Route::post('/applyjob', [App\Http\Controllers\JobController::class, 'applyJobPost'])->name('applyjob');
 Route::get('/applyPage', [App\Http\Controllers\JobController::class, 'index'])->name('applypage');
-Route::get('/postjob', [App\Http\Controllers\JobController::class, 'postjobGet'])->name('postjob');
 Route::post('/postjob', [App\Http\Controllers\JobController::class, 'postjobPost'])->name('postjob');
 
-Route::get('/announcement', [App\Http\Controllers\JobController::class, 'announcementGet'])->name('announcement');
 
-Route::get('/temp', function(){
-    return view('temp');
-});
+Route::get('/temps', [App\Http\Controllers\RoleController::class, 'temp'])->name('temps');
 
-Route::middleware('role:Admin')->group(function(){
-    Route::get('/user/account', [App\Http\Controllers\UserController::class, 'index'])->name('account');
-    Route::delete('/user/account/{user}/destroy', [App\Http\Controllers\UserController::class, 'destroy'])->name('user.destroy');
-});
+Route::get('/index', function(){
+    return view('index');
+})->name('index');
 
-Route::middleware(['auth', /*'can:view, user'*/])->group(function(){ //! can:view is policy and user is model passed to the policy
-    Route::get('/user/{user}/profile', [App\Http\Controllers\UserController::class, 'profile'])->name('profile');
-    Route::put('/user/{user}/profile', [App\Http\Controllers\UserController::class, 'update'])->name('profile');
-});
+Route::get('/about', [App\Http\Controllers\HomeController::class, 'about'])->name('about');
+Route::get('/contact', [App\Http\Controllers\HomeController::class, 'feedback'])->name('contact');
+Route::post('/feedback', [App\Http\Controllers\HomeController::class, 'feedbackPost'])->name('feedback');
+Route::get('/apply', [App\Http\Controllers\HomeController::class, 'apply'])->name('apply');
+
+Route::get('/applytemp', function(){
+    return view('applyjoptemp');
+})->name('applytemp');
+
