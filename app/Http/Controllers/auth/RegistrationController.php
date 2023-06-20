@@ -29,14 +29,18 @@ class RegistrationController extends Controller
             'name' => 'required',
             'email' => 'required|email|unique:users',
             'password' => 'required|min:8',
-            'department' => 'required'
+            'department' => 'nullable'
         ]);
+
         $data['name'] = $request->name;
         $data['email'] = $request->email;
         $data['password'] = $request->password;
 
         $user = User::create($data);
-        $user->departments()->attach(request('department')); // assign department
+
+        if(request('department') != null)
+            $user->departments()->attach(request('department')); // assign department
+
         if (!$user){
             return redirect('register')->with('error', 'Registration Failed!');
         }

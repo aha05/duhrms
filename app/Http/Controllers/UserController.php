@@ -58,7 +58,7 @@ class UserController extends Controller
             $data['avatar'] = substr($str, 14);
         }
 
-        if (!Auth::user()->userHasRole('ACC officer') && !Auth::user()->userHasRole('Hr officer')) {
+        if (!Auth::user()->userHasRole('AC officer') && !Auth::user()->userHasRole('Hr officer')) {
             if ($user->departments->first() != null)
                 $user->departments()->update(['department_id' => request('department'), 'user_id' => $user->id]); //! change department
             else
@@ -72,6 +72,9 @@ class UserController extends Controller
     }
     public function attachRole(User $user)
     {
+        if (!Gate::allows('update-roles')) {
+            return back()->with('error', 'Access denied!');
+        }
 
         $user->roles()->attach(request('role'));
 
@@ -80,6 +83,10 @@ class UserController extends Controller
 
     public function detachRole(User $user)
     {
+        if (!Gate::allows('update-roles')) {
+            return back()->with('error', 'Access denied!');
+        }
+
         $user->roles()->detach(request('role'));
 
         return back();

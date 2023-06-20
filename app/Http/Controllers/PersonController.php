@@ -7,16 +7,25 @@ use App\Models\Person;
 use App\Models\Department;
 use Illuminate\Support\Str;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Gate;
 
 class PersonController extends Controller
 {
     public function index()
     {
+        if (!Gate::allows('create-employees')) {
+            return back()->with('error', 'Access denied!');
+        }
+
         return view('employee.registerEmployee', ['department' => Department::all()]);
     }
 
     public function register()
     {
+        if (!Gate::allows('create-employees')) {
+            return back()->with('error', 'Access denied!');
+        }
+        
         request()->validate([
             'first_name' => ['required', 'string'],
             'middle_name' => ['required', 'string'],

@@ -75,21 +75,21 @@
                             </select>
                         </div>
                         <div class="form-group col-4">
-                            <label for="acc_status">Acc Status:</label>
-                            <select class="form-control" id="acc_status" name="acc_status"
-                                @unless (Auth::user()->userHasRole('ACC officer'))
+                            <label for="ac_status">Ac Status:</label>
+                            <select class="form-control" id="ac_status" name="ac_status"
+                                @unless (Auth::user()->userHasRole('AC officer'))
                                     disabled
-                                    @unless ($leave->isAccApprove($leave->id))
+                                    @unless ($leave->isAcApprove($leave->id))
                                         disabled
                                     @endunless
                                 @endunless
                             >
                             <option value=""><i class="fas fa-clock"></i> Pending</option>
                             <option value="Approved" class="text-success"
-                                {{ ($leave->getAccApproval($leave->id) && $leave->getAccApproval($leave->id)->status=='Approved' && $leave->getDepApproval($leave->id)->status=='Approved') == 'true' ? 'selected' : '' }}><i
+                                {{ ($leave->getAcApproval($leave->id) && $leave->getAcApproval($leave->id)->status=='Approved' && $leave->getDepApproval($leave->id)->status=='Approved') == 'true' ? 'selected' : '' }}><i
                                     class="fas fa-check"></i>Approved<i class="fas fa-check"></option>
                             <option value="Rejected" class="text-danger"
-                                {{ ($leave->getAccApproval($leave->id) && $leave->isAccApprove($leave->id) && $leave->getDepApproval($leave->id)->status=='Rejected')  == 'true' ? 'selected' : '' }}><i
+                                {{ ($leave->getAcApproval($leave->id) && $leave->isAcApprove($leave->id) && $leave->getDepApproval($leave->id)->status=='Rejected')  == 'true' ? 'selected' : '' }}><i
                                     class="fas fa-times"></i>Rejected</option>
                         </select>
                     </div>

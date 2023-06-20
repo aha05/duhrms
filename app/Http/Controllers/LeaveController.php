@@ -11,12 +11,17 @@ use App\Models\LeaveRequest;
 use Illuminate\Http\Request;
 use App\Models\LeaveApproval;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Gate;
 
 class LeaveController extends Controller
 {
-    
+
     public function index()
     {
+        if (!Gate::allows('view-leave-requests-lists')) {
+            return back()->with('error', 'Access denied!');
+        }
+
         $leave  = collect();
 
         foreach (LeaveRequest::all() as $item) {
@@ -25,12 +30,12 @@ class LeaveController extends Controller
                     if (Auth::user()->departments->first()->full_name == Employee::find($item->employee_id)->departments->first()->full_name)
                         $leave->push($item);
                 }
-            } else if ($item->isDepApprove($item->id) && Auth::user()->userHasRole('ACC officer')) {
+            } else if ($item->isDepApprove($item->id) && Auth::user()->userHasRole('AC officer')) {
                 if ($item->getDepApproval($item->id)->status == 'Approved') {
                     $leave->push($item);
                 }
-            } else if ($item->isAccApprove($item->id) && Auth::user()->userHasRole('Hr officer')) {
-                if ($item->getAccApproval($item->id)->status == 'Approved') {
+            } else if ($item->isAcApprove($item->id) && Auth::user()->userHasRole('Hr officer')) {
+                if ($item->getAcApproval($item->id)->status == 'Approved') {
                     $leave->push($item);
                 }
             } else {
@@ -54,6 +59,14 @@ class LeaveController extends Controller
 
     public function approvedLeaves()
     {
+        if (!Gate::allows('view-leave-requests-lists')) {
+            return back()->with('error', 'Access denied!');
+        }
+
+        if (!Gate::allows('view-leave-approvals-lists')) {
+            return back()->with('error', 'Access denied!');
+        }
+
         $leave  = collect();
         $oneCollection = collect();
         foreach (LeaveRequest::all() as $item) {
@@ -65,7 +78,7 @@ class LeaveController extends Controller
                                 $leave->push($item);
                         }
                     }
-                } else if (Auth::user()->userHasRole('ACC officer') && $item->isAccApprove($item->id)) {
+                } else if (Auth::user()->userHasRole('AC officer') && $item->isAcApprove($item->id)) {
                     if ($items->approved_at == 'Academics') {
                         if ($items->status == 'Approved')
                             $leave->push($item);
@@ -84,6 +97,14 @@ class LeaveController extends Controller
 
     public function rejectedLeaves()
     {
+        if (!Gate::allows('view-leave-requests-lists')) {
+            return back()->with('error', 'Access denied!');
+        }
+
+        if (!Gate::allows('view-leave-approvals-lists')) {
+            return back()->with('error', 'Access denied!');
+        }
+
         $leave  = collect();
         foreach (LeaveRequest::all() as $item) {
             foreach ($item->leaveApprover as $items) {
@@ -94,7 +115,7 @@ class LeaveController extends Controller
                                 $leave->push($item);
                         }
                     }
-                } else if (Auth::user()->userHasRole('ACC officer') && $item->isAccApprove($item->id)) {
+                } else if (Auth::user()->userHasRole('AC officer') && $item->isAcApprove($item->id)) {
                     if ($items->approved_at == 'Academics') {
                         if ($items->status == 'Rejected')
                             $leave->push($item);
@@ -113,6 +134,14 @@ class LeaveController extends Controller
 
     public function pendingLeaves()
     {
+        if (!Gate::allows('view-leave-requests-lists')) {
+            return back()->with('error', 'Access denied!');
+        }
+
+        if (!Gate::allows('view-leave-approvals-lists')) {
+            return back()->with('error', 'Access denied!');
+        }
+
         $leave  = collect();
 
         foreach (LeaveRequest::all() as $item) {
@@ -122,12 +151,12 @@ class LeaveController extends Controller
                         if (Auth::user()->departments->first()->full_name == Employee::find($item->employee_id)->departments->first()->full_name)
                             $leave->push($item);
                     }
-                } else if ($item->isDepApprove($item->id) && Auth::user()->userHasRole('ACC officer')) {
-                    if ($item->getDepApproval($item->id)->status == 'Approved' && !$item->isAccApprove($item->id)) {
+                } else if ($item->isDepApprove($item->id) && Auth::user()->userHasRole('AC officer')) {
+                    if ($item->getDepApproval($item->id)->status == 'Approved' && !$item->isAcApprove($item->id)) {
                         $leave->push($item);
                     }
-                } else if ($item->isAccApprove($item->id) && Auth::user()->userHasRole('Hr officer')) {
-                    if ($item->getAccApproval($item->id)->status == 'Approved' && !$item->isHrApprove($item->id)) {
+                } else if ($item->isAcApprove($item->id) && Auth::user()->userHasRole('Hr officer')) {
+                    if ($item->getAcApproval($item->id)->status == 'Approved' && !$item->isHrApprove($item->id)) {
                         $leave->push($item);
                     }
                 } else {
@@ -138,19 +167,25 @@ class LeaveController extends Controller
         return view('leave.pendingLeave', ['leave' => $leave]);
     }
 
-    public function request()
+    public function createLeaveRequest()
     {
+        if (!Gate::allows('create-leave-requests')) {
+            return back()->with('error', 'Access denied!');
+        }
 
         return view('leave.leaveRequest', ['leaveType' => LeaveType::all()]);
     }
 
-    public function leaveRequest()
+    public function storeLeaveRequest()
     {
         // request()->validate([
         //     'name' => ['required', 'string'],
         //     'description' => ['required', 'string'],
         // ]);
 
+        if (!Gate::allows('create-leave-requests')) {
+            return back()->with('error', 'Access denied!');
+        }
 
         $employee = Employee::where('emp_id', request('employeeId'))->first();
         $leaveType = LeaveType::where('name', request('leaveType'))->first();
@@ -170,8 +205,12 @@ class LeaveController extends Controller
         return back()->with('error', 'Failed!');
     }
 
-    public function requestUpdate(LeaveRequest $leave)
+    public function updateLeaveRequest(LeaveRequest $leave)
     {
+
+        if (!Gate::allows('create-leave-requests')) {
+            return back()->with('error', 'Access denied!');
+        }
 
         $leave->status = request('status');
         $leave->save();
@@ -181,11 +220,18 @@ class LeaveController extends Controller
 
     public function leaveTypes()
     {
+        if (!Gate::allows('view-leave-types-lists')) {
+            return back()->with('error', 'Access denied!');
+        }
+
         return view('leave.leaveType', ['leaveType' => LeaveType::all()]);
     }
 
-    public function leaveType()
+    public function createLeaveType()
     {
+        if (!Gate::allows('create-leave.types')) {
+            return back()->with('error', 'Access denied!');
+        }
         request()->validate([
             'name' => ['required', 'string'],
             'description' => ['required', 'string'],
@@ -204,6 +250,10 @@ class LeaveController extends Controller
 
     public function pendingLeave($id)
     {
+        if (!Gate::allows('view-leave-approvals-lists')) {
+            return back()->with('error', 'Access denied!');
+        }
+
         $leave = LeaveRequest::find($id);
         $approver = LeaveApproval::all();
         return view('leave.approval', ['leave' => $leave, 'approver' => $approver]);
@@ -211,6 +261,9 @@ class LeaveController extends Controller
 
     public function leaveApprover(LeaveRequest $request)
     {
+        if (!Gate::allows('update-leave-approvals')) {
+            return back()->with('error', 'Access denied!');
+        }
 
         $status = null;
         if (Auth::user()->userHasRole('DEP officer')) {
@@ -223,8 +276,8 @@ class LeaveController extends Controller
                     if ($request->isDepApprove($request->id)) { //! check whether it Already Approved!
                         if ($request->getDepApproval($request->id)->status == request('dep_status')) {
                             return back()->with('error', 'You Already ' . $status . '!');
-                        } else if (request('dep_status') == 'Rejected' && $request->isAccApprove($request->id)) {
-                            if ($request->getAccApproval($request->id)->status == 'Approved') {
+                        } else if (request('dep_status') == 'Rejected' && $request->isAcApprove($request->id)) {
+                            if ($request->getAcApproval($request->id)->status == 'Approved') {
                                 return back()->with('error', 'Failed!');
                             }
 
@@ -243,27 +296,27 @@ class LeaveController extends Controller
                     return back()->with('error', 'This is not a request for your department!');
                 }
             }
-        } else if (Auth::user()->userHasRole('ACC officer')) {
+        } else if (Auth::user()->userHasRole('AC officer')) {
             if ($request->isDepApprove($request->id) && $request->getDepApproval($request->id)->status == 'Approved') {
                 global $status;
-                $status = Str::ucfirst(request('acc_status'));
-                if ($request->isAccApprove($request->id)) { //! check whether it Already Approved!
-                    if ($request->getAccApproval($request->id)->status == request('acc_status'))
+                $status = Str::ucfirst(request('ac_status'));
+                if ($request->isAcApprove($request->id)) { //! check whether it Already Approved!
+                    if ($request->getAcApproval($request->id)->status == request('ac_status'))
                         return back()->with('error', 'You Already ' . $status . '!');
 
-                    else if (request('acc_status') == 'Rejected' && $request->isHrApprove($request->id)) {
+                    else if (request('ac_status') == 'Rejected' && $request->isHrApprove($request->id)) {
                         if ($request->getHrApproval($request->id)->status == 'Approved') {
                             return back()->with('error', 'Failed!');
                         }
 
-                        $approval = $request->getAccApproval($request->id);
-                        $approval->status = request('acc_status'); //! change status
+                        $approval = $request->getAcApproval($request->id);
+                        $approval->status = request('ac_status'); //! change status
                         $approval->save();
                         return back()->with('success', 'Successfully Updated');
                     } else {
 
-                        $approval = $request->getAccApproval($request->id);
-                        $approval->status = request('acc_status'); //! change status
+                        $approval = $request->getAcApproval($request->id);
+                        $approval->status = request('ac_status'); //! change status
                         $approval->save();
                         return back()->with('success', 'Successfully Updated');
                     }
@@ -272,7 +325,7 @@ class LeaveController extends Controller
                 return back()->with('error', 'First, The Department Must Give Approval!');
             }
         } else if (Auth::user()->userHasRole('HR officer')) {  //! check if current user has Role!
-            if ($request->isDepApprove($request->id) && $request->isAccApprove($request->id)) { //! check workflow sequence is satisfied!
+            if ($request->isDepApprove($request->id) && $request->isAcApprove($request->id)) { //! check workflow sequence is satisfied!
 
                 global $status;
                 $status = Str::ucfirst(request('hr_status'));
@@ -304,12 +357,16 @@ class LeaveController extends Controller
         if (Auth::user()->userHasRole('DEP officer')) {
             global  $approved_at;
             $approved_at = 'Department';
-        } else if (Auth::user()->userHasRole('ACC officer')) {
+        } else if (Auth::user()->userHasRole('AC officer')) {
             global  $approved_at;
             $approved_at = 'Academics';
         } else {
             global  $approved_at;
             $approved_at = 'Human Resource';
+        }
+
+        if (!Gate::allows('create-leave-approvals')) {
+            return back()->with('error', 'Access denied!');
         }
 
         $approver = LeaveApproval::create([

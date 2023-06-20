@@ -25,11 +25,6 @@ class DatabaseSeeder extends Seeder
         //     'name' => 'Test User',
         //     'email' => 'test@example.com',
         // ]);
-        $superuser = User::create([
-            'name' => Str::ucfirst('Super Admin'),
-            'email' => 'superadmin@gmail.com',
-            'password' => 'Password',
-        ]);
 
         $user = User::create([
             'name' => Str::ucfirst('Admin'),
@@ -42,10 +37,11 @@ class DatabaseSeeder extends Seeder
             'slug' => Str::of(Str::lower('Admin'))->slug('-'),
         ]);
 
-        $superAdmin = Role::create([
-            'name' => Str::ucfirst('Super Admin'),
-            'slug' => Str::of(Str::lower('Super Admin'))->slug('-'),
-        ]);
+
+        $admin->permissions()->attach(Permission::all()); // use $superAdmin->permissions() instead of $superAdmin->permissions to attach collection
+        $user->roles()->attach($admin);
+
+
 
 
         // Permission on Role
@@ -84,10 +80,17 @@ class DatabaseSeeder extends Seeder
         Permission::create(['name' => 'update.leave.requests', 'slug' => 'update-leave-requests',]);
         Permission::create(['name' => 'view.leave.requests.lists', 'slug' => 'view-leave-requests-lists']);
 
+        // Permission on LeaveRequests
+        Permission::create(['name' => Str::ucfirst('create.leave.approvals'), 'slug' => Str::of(Str::lower('create leave approvals'))->slug('-')]);
+        Permission::create(['name' => 'destroy.leave.approvals', 'slug' => 'destroy-leave-approvals']);
+        Permission::create(['name' => 'update.leave.approvals', 'slug' => 'update-leave-approvals',]);
+        Permission::create(['name' => 'view.leave.approvals.lists', 'slug' => 'view-leave-approvals-lists']);
 
-        $user->roles()->attach($admin);
-        $superAdmin->permissions()->attach(Permission::all()); // use $superAdmin->permissions() instead of $superAdmin->permissions to attach collection
-        $superuser->roles()->attach($admin);
-        $superuser->roles()->attach($superAdmin);
+        // Permission on LeaveRequests
+        Permission::create(['name' => Str::ucfirst('create.leave.approvals'), 'slug' => Str::of(Str::lower('create leave approvals'))->slug('-')]);
+        Permission::create(['name' => 'destroy.leave.approvals', 'slug' => 'destroy-leave-approvals']);
+        Permission::create(['name' => 'update.leave.approvals', 'slug' => 'update-leave-approvals',]);
+        Permission::create(['name' => 'view.leave.approvals.lists', 'slug' => 'view-leave-approvals-lists']);
+
     }
 }

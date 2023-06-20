@@ -1,5 +1,15 @@
 @extends('layouts.layout')
 @section('content')
+    @if (session()->has('error'))
+        <script>
+            toastr.error('{{ session('error') }}');
+        </script>
+    @endif
+    @if (session()->has('success'))
+        <script>
+            toastr.success('{{ session('success') }}');
+        </script>
+    @endif
     <main>
         <div class="cards">
             <div style="border-left: 3px solid red;" class="card-single">

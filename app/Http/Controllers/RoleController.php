@@ -10,6 +10,7 @@ use Illuminate\Support\Facades\Auth;
 use App\Models\User;
 use Illuminate\Support\Facades\Notification;
 use App\Notifications\AdminNotifications;
+use Illuminate\Support\Facades\Gate;
 
 
 class RoleController extends Controller
@@ -20,21 +21,33 @@ class RoleController extends Controller
         return view('temp', ['permissions' => Permission::all()]);
     }
 
-    public function index()
+    public function index() // create role
     {
-        $user = Auth::user();
+        if (!Gate::allows('create-roles')) {
+            return back()->with('error', 'Access denied!');
+        }
 
+        $user = Auth::user();
         return view('admin.roles.roles', ['permissions' => Permission::all()]);
     }
 
     public function  allRoles()
     {
+        if (!Gate::allows('view-roles-lists')) {
+            return back()->with('error', 'Access denied!');
+        }
+
         $user = Auth::user();
         return view('admin.roles.allroles', ['user' => $user, 'roles' => Role::all()]);
     }
 
     public function store()
     {
+
+        if (!Gate::allows('create-roles')) {
+            return back()->with('error', 'Access denied!');
+        }
+
         request()->validate([
             'name' => ['required', 'string']
         ]);
@@ -59,6 +72,10 @@ class RoleController extends Controller
     }
     public function destroy(Role $role)
     {
+        if (!Gate::allows('destroy-roles')) {
+            return back()->with('error', 'Access denied!');
+        }
+
         $role->delete();
         session()->flash('role-deleted', '<' . $role->name . '> Role has been deleted!');
         return back();
@@ -66,6 +83,10 @@ class RoleController extends Controller
 
     public function edit(Role $role)
     {
+        if (!Gate::allows('update-roles')) {
+            return back()->with('error', 'Access denied!');
+        }
+
         return view('admin.roles.edit', [
             'role' => $role,
             'permissions' => Permission::all()
@@ -74,6 +95,10 @@ class RoleController extends Controller
 
     public function update(Role $role)
     {
+        if (!Gate::allows('update-roles')) {
+            return back()->with('error', 'Access denied!');
+        }
+
         request()->validate([
             'name' => ['required', 'string']
         ]);
@@ -92,12 +117,20 @@ class RoleController extends Controller
 
     public function attachPermission(Role $role)
     {
+        if (!Gate::allows('update-roles')) {
+            return back()->with('error', 'Access denied!');
+        }
+
         $role->permissions()->attach(request('permission'));
         return back();
     }
 
     public function detachPermission(Role $role)
     {
+        if (!Gate::allows('update-roles')) {
+            return back()->with('error', 'Access denied!');
+        }
+
         $role->permissions()->detach(request('permission'));
 
         return back();

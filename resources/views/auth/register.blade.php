@@ -58,7 +58,7 @@
                                 <div class="col-md-6">
                                     <select id="department" class="form-control @error('department') is-invalid @enderror"
                                         name="department" value="{{ old('department') }}" autocomplete="department"
-                                        required>
+                                        >
                                         <option value="">Select Department</option>
                                         @foreach ($department as $item)
                                             <option value="{{ $item->id }}"

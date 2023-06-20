@@ -84,16 +84,16 @@
                             @endif
                         </td>
 
-                         {{-- Accadamics approval status --}}
+                         {{-- Acadamics approval status --}}
                         <td>
-                            @if (!$item->isAccApprove($item->id))
+                            @if (!$item->isAcApprove($item->id))
                                 <i class="fas fa-clock"></i> Pending
                             @else
                                 @if ($item->hasApprover($item->id))
-                                    @if ($item->isAccApprove($item->id))
+                                    @if ($item->isAcApprove($item->id))
                                         @foreach ($item->leaveApprover as $approvers)
                                             @if ($approvers->leave_request_id == $item->id)
-                                                @if ($approvers->approver->userHasRole('ACC officer'))
+                                                @if ($approvers->approver->userHasRole('AC officer'))
                                                     @if ($approvers->status == 'Approved')
                                                         <span class="text-success">
                                                             <i class="fas fa-check"></i> {{ $approvers->status }}

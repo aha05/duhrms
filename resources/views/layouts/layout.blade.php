@@ -44,15 +44,6 @@
     <script src="{{ asset('toaster/jquery-migrate.js') }}"></script>
     <link href="{{ asset('toaster/toaster.css') }}" rel="stylesheet" />
     <script src="{{ asset('toaster/toaster.js') }}"></script>
-
-    <script>
-        jQuery(window).load(function() {
-            // will first fade out the loading animation
-            jQuery("#status").fadeOut();
-            // will fade out the whole DIV that covers the website.
-            jQuery("#preloader").delay(100).fadeOut("slow");
-        })
-    </script>
 </head>
 
 <body id="page-top">
@@ -77,9 +68,7 @@
                 <!-- Begin Page Content -->
                 <div class="container-fluid">
                     <div id="app">
-                        {{-- <div id="preloader">
-                            <div class="spinner spinner--steps icon-spinner"></div>
-                        </div> --}}
+                        {{-- @include('partials._preloader') --}}
                         <!-- Page Heading -->
                         @yield('content')
 

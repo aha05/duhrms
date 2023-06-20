@@ -66,7 +66,7 @@
                                     @enderror
                                 </div>
                             </div>
-                            @if (!Auth::user()->userHasRole('ACC officer') && !Auth::user()->userHasRole('Hr officer'))
+                            @if (!$user->userHasRole('ACC officer') && !$user->userHasRole('Hr officer'))
                                 <div class="row mb-3">
                                     <label for="department"
                                         class="col-md-4 col-form-label text-md-end">{{ __('Department') }}</label>

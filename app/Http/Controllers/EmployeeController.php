@@ -15,11 +15,15 @@ use Illuminate\Support\Str;
 use App\Models\Compensation;
 use Illuminate\Http\Request;
 use App\Models\EducationalInfo;
+use Illuminate\Support\Facades\Gate;
 
 class EmployeeController extends Controller
 {
     public function register()
     {
+        if (!Gate::allows('create-employees')) {
+            return back()->with('error', 'Access denied!');
+        }
 
         $status = request()->validate([
 
@@ -158,6 +162,11 @@ class EmployeeController extends Controller
     public function index()
     {
 
+        if (!Gate::allows('view-employees-lists')) {
+
+            return back()->with('error', 'Access denied!');
+        }
+
         return view('employee.allemployee', ['person' => Person::all(), 'users' => User::all()]);
     }
 
@@ -171,6 +180,9 @@ class EmployeeController extends Controller
 
     public function updatePerson(Person $person)
     {
+        if (!Gate::allows('update-employees')) {
+            return back()->with('error', 'Access denied!');
+        }
 
          $status = request()->validate([
             'photo' => ['required', 'file'],
@@ -236,6 +248,9 @@ class EmployeeController extends Controller
 
     public function updateContact(ContactInfo $contact)
     {
+        if (!Gate::allows('update-employees')) {
+            return back()->with('error', 'Access denied!');
+        }
 
         $data = request()->validate([
             'first_name' => ['required', 'string'],
@@ -257,6 +272,10 @@ class EmployeeController extends Controller
 
     public function editEmployee(Employee $employee)
     {
+        if (!Gate::allows('update-employees')) {
+            return back()->with('error', 'Access denied!');
+        }
+
         request()->validate([
             'department' => ['required'],
         ]);
@@ -286,6 +305,9 @@ class EmployeeController extends Controller
 
     public function comp_benefit(Employee $employee)
     {
+        if (!Gate::allows('update-employees')) {
+            return back()->with('error', 'Access denied!');
+        }
 
         $data = request()->validate([
             'salary' => ['required'],
@@ -328,6 +350,9 @@ class EmployeeController extends Controller
 
     public function addEducation(Employee $employee)
     {
+        if (!Gate::allows('update-employees')) {
+            return back()->with('error', 'Access denied!');
+        }
 
         $status = request()->validate([
             'institution' => ['required'],
@@ -354,6 +379,9 @@ class EmployeeController extends Controller
 
     public function editEducation(EducationalInfo $education)
     {
+        if (!Gate::allows('update-employees')) {
+            return back()->with('error', 'Access denied!');
+        }
 
         $data = request()->validate([
             'institution' => ['required'],
@@ -373,6 +401,9 @@ class EmployeeController extends Controller
 
     public function addExperience(Employee $employee)
     {
+        if (!Gate::allows('update-employees')) {
+            return back()->with('error', 'Access denied!');
+        }
 
         $status = request()->validate([
             'company' => ['required'],
@@ -393,6 +424,9 @@ class EmployeeController extends Controller
 
     public function editBank(Employee $employee)
     {
+        if (!Gate::allows('update-employees')) {
+            return back()->with('error', 'Access denied!');
+        }
 
         $data = request()->validate([
             'full_name' => ['required'],

@@ -11,6 +11,7 @@ use App\Http\Controllers\EmployeeController;
 use App\Http\Controllers\DepartmentController;
 use App\Http\Controllers\PermissionController;
 use App\Http\Controllers\VacancyRequestController;
+use App\Http\Controllers\VacancyApprovalController;
 
 
 Route::middleware('role:Admin')->group(function () {
@@ -70,7 +71,7 @@ Route::middleware('role:Admin')->group(function () {
 
     //? Leaves
     Route::get('/employee/leaves', [LeaveController::class, 'index'])->name('leaves');
-    Route::post('/employee/leave/type', [LeaveController::class, 'leaveType'])->name('leave.type');
+    Route::post('/employee/create/leaveType', [LeaveController::class, 'createLeaveType'])->name('leave.type');
     Route::get('/employee/leave/types', [LeaveController::class, 'leaveTypes'])->name('leave.types');
 
     Route::get('/employee/leave/{request}/approve', [LeaveController::class, 'pendingLeave'])->name('leave.approve');
@@ -80,7 +81,7 @@ Route::middleware('role:Admin')->group(function () {
     Route::get('/employee/leave/rejected', [LeaveController::class, 'rejectedLeaves'])->name('leave.rejected');
     Route::get('/employee/leave/approved', [LeaveController::class, 'approvedLeaves'])->name('leave.approved');
 
-    Route::put('/employee/request/{leave}/update', [LeaveController::class, 'requestUpdate'])->name('leave.request.update');
+    Route::put('/employee/request/{leave}/update', [LeaveController::class, 'updateLeaveRequest'])->name('leave.request.update');
 
     // ? Department
     Route::get('/department', [DepartmentController::class, 'index'])->name('department');
@@ -90,6 +91,10 @@ Route::middleware('role:Admin')->group(function () {
 
     //? Vacancy
     Route::resource('vacancy-requests', VacancyRequestController::class);
+    Route::get('/vacancy/{vacancyRequest}/approval', [VacancyApprovalController::class, 'index'])->name('vacancy.approval');
+    Route::post('/vacancy/{vacancyRequest}/approve', [VacancyApprovalController::class, 'approve'])->name('vacancy.approve');
+    Route::post('/vacancy/requests', [VacancyRequestController::class, 'filterByDepartment'])->name('vacancy.filter.department');
+    Route::get('/vacancy/requests', [VacancyRequestController::class, 'filterByDepartment'])->name('vacancy.filter.department');
 
 
 
@@ -101,6 +106,6 @@ Route::middleware(['auth', /*'can:view, user'*/])->group(function () { //! can:v
     Route::put('/{user}/profile', [UserController::class, 'update'])->name('profile');
     Route::get('/chart', [ChartController::class, 'index'])->name('chart');
     Route::get('/employee/leave', [LeaveController::class, 'leaveHistory'])->name('leaves.history');
-    Route::get('/employee/request/form', [LeaveController::class, 'request'])->name('leave.request.form');
-    Route::post('/employee/leave/request', [LeaveController::class, 'leaveRequest'])->name('leave.request');
+    Route::get('/employee/request/form', [LeaveController::class, 'createLeaveRequest'])->name('leave.request.form');
+    Route::post('/employee/leave/request', [LeaveController::class, 'storeLeaveRequest'])->name('leave.request');
 });

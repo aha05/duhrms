@@ -59,11 +59,11 @@ class LeaveRequest extends Model
         return false;
     }
 
-    public function isAccApprove($id)
+    public function isAcApprove($id)
     {
         foreach ($this->leaveApprover as $approvers) {
             if ($approvers->leave_request_id == $id) {
-                   if($approvers->approver->userHasRole('ACC officer'))
+                   if($approvers->approver->userHasRole('AC officer'))
                     return true;
             }
         }
@@ -93,11 +93,11 @@ class LeaveRequest extends Model
         return false;
     }
 
-    public function getAccApproval($id)
+    public function getAcApproval($id)
     {
         foreach ($this->leaveApprover as $approvers) {
             if ($approvers->leave_request_id == $id) {
-                   if($approvers->approver->userHasRole('ACC officer'))
+                   if($approvers->approver->userHasRole('AC officer'))
                     return $approvers;
             }
         }

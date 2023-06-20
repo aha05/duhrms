@@ -22,7 +22,7 @@ class VacancyRequestController extends Controller
     {
 
         $vacancyRequests = VacancyRequest::with('department')->latest()->get();
-        return view('vacancy.vacancy', ['vacancyRequests' => $vacancyRequests]);
+        return view('vacancy.vacancy', ['vacancyRequests' => $vacancyRequests, 'departments' => Department::all()]);
     }
 
     /**
@@ -57,6 +57,14 @@ class VacancyRequestController extends Controller
             return back()->with('success', 'Succeed');
 
         return back()->with('error', 'Failed');
+    }
+
+    public function filterByDepartment(){
+        request()->validate([
+            'department'=>['required'],
+        ]);
+        $department =  Department::find(request('department'));
+        return view('vacancy.vacancy',['vacancyRequests'=>$department->vacancyRequests, 'departments' => Department::all(), 'depPrev'=>$department->full_name]);
     }
 
     /**

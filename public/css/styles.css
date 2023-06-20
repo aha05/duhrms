@@ -93,7 +93,7 @@
     z-index: 99999;
     height: 100%;
     width: 100%;
-    background: #fff;
+    background: rgba(0,0,0, .5);
     display: flex;
 }
 .loader{

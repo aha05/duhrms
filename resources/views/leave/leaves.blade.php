@@ -81,9 +81,9 @@
                             @endif
                         </td>
 
-                        {{-- Accadamics approval status --}}
+                        {{-- Acadamics approval status --}}
                         <td>
-                            @if (!$item->isAccApprove($item->id))
+                            @if (!$item->isAcApprove($item->id))
                                 @if ($item->hasApprover($item->id))
                                     @if ($item->isDepApprove($item->id))
                                         @if ($item->getDepApproval($item->id)->status == 'Rejected')
@@ -101,16 +101,16 @@
                             @else
                                 @if ($item->hasApprover($item->id))
                                     @if ($item->getDepApproval($item->id)->status == 'Approved')
-                                        @if ($item->isAccApprove($item->id))
-                                            @if ($item->getAccApproval($item->id)->status == 'Approved')
+                                        @if ($item->isAcApprove($item->id))
+                                            @if ($item->getAcApproval($item->id)->status == 'Approved')
                                                 <span class="text-success">
                                                     <i class="fas fa-check"></i>
-                                                    {{ $item->getAccApproval($item->id)->status }}
+                                                    {{ $item->getAcApproval($item->id)->status }}
                                                 </span>
                                             @else
                                                 <span class="text-danger">
                                                     <i class="fas fa-times"></i></i>
-                                                    {{ $item->getAccApproval($item->id)->status }}
+                                                    {{ $item->getAcApproval($item->id)->status }}
                                                 </span>
                                             @endif
                                         @endif
@@ -143,7 +143,7 @@
                                 @endif
                             @else
                                 @if ($item->hasApprover($item->id))
-                                    @if ($item->getDepApproval($item->id)->status == 'Approved' && $item->getAccApproval($item->id)->status == 'Approved')
+                                    @if ($item->getDepApproval($item->id)->status == 'Approved' && $item->getAcApproval($item->id)->status == 'Approved')
                                         @if ($item->isHrApprove($item->id))
                                             @if ($item->getHrApproval($item->id)->status == 'Approved')
                                                 <span class="text-success">
