@@ -13,13 +13,19 @@ class VacancyApprovalController extends Controller
 {
     public function index(VacancyRequest $vacancyRequest)
     {
-
+        if (!Gate::allows('create-vacancy-approvals')) {
+            return back()->with('error', 'Access denied!');
+        }
 
         return view('vacancy.vacancyApprovel', ['vacancyRequest' => $vacancyRequest, 'vacancyApproval' => VacancyApproval::all()]);
     }
 
     public function approve(VacancyRequest $vacancyRequest)
     {
+        if (!Gate::allows('update-vacancy-approvals')) {
+            return back()->with('error', 'Access denied!');
+        }
+
         $status = '';
 
         if (Auth::user()->userHasRole('AC officer')) {
@@ -91,6 +97,9 @@ class VacancyApprovalController extends Controller
         ]);
         // dd(request('comment'));
 
+        if (!Gate::allows('create-vacancy-approvals')) {
+            return back()->with('error', 'Access denied!');
+        }
         $success = VacancyApproval::create([
             'approver_id' => Auth::user()->id,
             'vacancy_request_id' => $vacancyRequest->id,

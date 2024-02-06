@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Department;
 use Illuminate\Http\Request;
 use App\Models\VacancyRequest;
+use Illuminate\Support\Facades\Gate;
 
 use function PHPUnit\Framework\returnSelf;
 
@@ -20,6 +21,9 @@ class VacancyRequestController extends Controller
      */
     public function index()
     {
+        if (!Gate::allows('view-vacancy-requests-lists')) {
+            return back()->with('error', 'Access denied!');
+        }
 
         $vacancyRequests = VacancyRequest::with('department')->latest()->get();
         return view('vacancy.vacancy', ['vacancyRequests' => $vacancyRequests, 'departments' => Department::all()]);
@@ -32,6 +36,9 @@ class VacancyRequestController extends Controller
      */
     public function create()
     {
+        if (!Gate::allows('create-vacancy-requests')) {
+            return back()->with('error', 'Access denied!');
+        }
 
         return view('vacancy.apply', ['departments' => Department::all()]);
     }
@@ -44,6 +51,10 @@ class VacancyRequestController extends Controller
      */
     public function store(Request $request)
     {
+        if (!Gate::allows('create-vacancy-requests')) {
+            return back()->with('error', 'Access denied!');
+        }
+
         $data = request()->validate([
             'department' => ['required'],
             'title' => ['required'],
@@ -60,6 +71,10 @@ class VacancyRequestController extends Controller
     }
 
     public function filterByDepartment(){
+        if (!Gate::allows('view-vacancy-requests-lists')) {
+            return back()->with('error', 'Access denied!');
+        }
+
         request()->validate([
             'department'=>['required'],
         ]);

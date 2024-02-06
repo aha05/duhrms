@@ -1,10 +1,20 @@
 @extends('layouts.layout')
 @section('content')
+@if (session()->has('error'))
+        <script>
+            toastr.error('{{ session('error') }}');
+        </script>
+    @endif
+    @if (session()->has('success'))
+        <script>
+            toastr.success('{{ session('success') }}');
+        </script>
+    @endif
     <div class="container">
         <div class="row justify-content-center">
             <div class="mb-2 @if (auth()->user()->userHasRole('Admin')) col-md-5 @else col-md-8 @endif">
                 <div class="card">
-                    <div class="card-header text-center ">
+                    <div class="card-header text-center">
                         <div class="image d-flex flex-column justify-content-center align-items-center">
                             <button class="btn btn-secondary">
                                 <img src="{{ $user->avatar }}" height="100" width="100" />

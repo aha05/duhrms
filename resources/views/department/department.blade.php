@@ -14,22 +14,21 @@
 
     <div class="container p-2">
         <div class="col-6">
-            <h2 class="text-primary">Departments</h2>
+            <h3 class="p-2 pb-0">Dashboard><span class="text-primary">Departments</span> </h3>
         </div>
-        <div class="row pt-3 mb-3">
+        <div class="row pt-1 mb-3">
             <div class="col-4 ">
-                <input type="text" id="myInput" class="form-control" width="40px" onkeyup="myFunction()"
-                    placeholder="Search" title="Type in a name">
+
             </div>
             <div class="col-8 text-end">
                 <button type="button" data-bs-toggle="modal" data-bs-target="#leaveType" class="btn btn-primary">
-                    <i class="bi bi-plus-circle"></i>&nbsp; New Department
+                    <i class="fas fa-plus-circle"></i> New Department
                 </button>
             </div>
         </div>
 
 
-        <table class="table table-hover " id="sortTable" width="100%">
+        <table class="table table-hover" id="dataTable" width="100%" cellspacing="0">
 
             <thead class="table-primary">
                 <tr>
@@ -69,37 +68,6 @@
             </tbody>
         </table>
     </div>
-    <script src="{{ asset('js/bootstraps.js') }}"></script>
-
-    <script src='https://kit.fontawesome.com/a076d05399.js' crossorigin='anonymous'></script>
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
-
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
-    <link rel="stylesheet" href="https://cdn.datatables.net/1.10.22/css/dataTables.bootstrap4.min.css">
-    <script src="https://cdn.datatables.net/1.10.22/js/jquery.dataTables.min.js"></script>
-    <script src="https://cdn.datatables.net/1.10.22/js/dataTables.bootstrap4.min.js"></script>
-    <script>
-        $(document).ready(function() {
-            $("#myInput").on("keyup", function() {
-                var value = $(this).val().toLowerCase();
-                $("#myTable tr").filter(function() {
-                    $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
-                });
-            });
-        });
-
-        $('table').dataTable({
-            searching: false,
-            paging: true,
-            info: true
-        });
-        $('#sortTable').DataTable();
-    </script>
-
-
-
 
     {{--  Employee Leave Type Modal --}}
     <div class="modal fade" id="leaveType" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">

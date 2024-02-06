@@ -33,6 +33,7 @@ return new class extends Migration
             $table->string('woreda');
             $table->string('kebele');
             $table->date('date_of_registration')->default(now()->format('Y-m-d'));
+            $table->softDeletes();
             $table->timestamps();
         });
     }

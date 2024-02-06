@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Person;
 use App\Models\Employee;
+use App\Models\LeaveExitForm;
 use App\Models\LeaveType;
 use App\Models\Permission;
 use Illuminate\Support\Str;
@@ -12,6 +13,13 @@ use Illuminate\Http\Request;
 use App\Models\LeaveApproval;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Gate;
+use App\Notifications\LeaveApprovalNotification;
+use App\Models\User;
+use Carbon\Carbon;
+use Illuminate\Support\Facades\Notification;
+use App\Notifications\AdminNotifications;
+use App\Notifications\UserNotifications;
+
 
 class LeaveController extends Controller
 {
@@ -24,21 +32,16 @@ class LeaveController extends Controller
 
         $leave  = collect();
 
-        foreach (LeaveRequest::all() as $item) {
+        foreach (LeaveRequest::all()->sortByDesc('created_at') as $item) {
             if (Auth::user()->userHasRole('DEP officer')) {
-                if (Auth::user()->departments != null && Employee::find($item->employee_id)->departments != null) {
-                    if (Auth::user()->departments->first()->full_name == Employee::find($item->employee_id)->departments->first()->full_name)
+                if (((Auth::user()->departments->first() ?? '') != null) && ((Employee::find($item->employee_id)->departments->first() ?? '') != null)) {
+                    // Check approver department head office and employee department are the same
+                    if (Auth::user()->departments->first()->full_name == Employee::find($item->employee_id)->departments->first()->full_name) {
                         $leave->push($item);
-                }
-            } else if ($item->isDepApprove($item->id) && Auth::user()->userHasRole('AC officer')) {
-                if ($item->getDepApproval($item->id)->status == 'Approved') {
-                    $leave->push($item);
-                }
-            } else if ($item->isAcApprove($item->id) && Auth::user()->userHasRole('Hr officer')) {
-                if ($item->getAcApproval($item->id)->status == 'Approved') {
-                    $leave->push($item);
+                    }
                 }
             } else {
+                $leave->push($item);
             }
         }
 
@@ -47,14 +50,19 @@ class LeaveController extends Controller
 
     public function leaveHistory()
     {
+
         $leave  = collect();
+        $approvals = collect();
 
         foreach (LeaveRequest::all()->sortByDesc('created_at') as $item) {
             if ($item->user_id == Auth::user()->id) {
                 $leave->push($item);
+
+                if ($item->status == 'Approved')
+                    $approvals->push($item);
             }
         }
-        return view('leave.leaves', ['leave' => $leave]);
+        return view('leave.leaveHistory', ['leave' => $leave, 'approvals' => $approvals, 'forms' => LeaveExitForm::all()]);
     }
 
     public function approvedLeaves()
@@ -147,7 +155,7 @@ class LeaveController extends Controller
         foreach (LeaveRequest::all() as $item) {
             if ($item->status == 'pending') {
                 if (Auth::user()->userHasRole('DEP officer') && !$item->isDepApprove($item->id)) {
-                    if (Auth::user()->departments != null && Employee::find($item->employee_id)->departments != null) {
+                    if (((Auth::user()->departments->first() ?? '') != null) && ((Employee::find($item->employee_id)->departments->first() ?? '') != null)) {
                         if (Auth::user()->departments->first()->full_name == Employee::find($item->employee_id)->departments->first()->full_name)
                             $leave->push($item);
                     }
@@ -178,10 +186,12 @@ class LeaveController extends Controller
 
     public function storeLeaveRequest()
     {
-        // request()->validate([
-        //     'name' => ['required', 'string'],
-        //     'description' => ['required', 'string'],
-        // ]);
+
+        request()->validate([
+            'employeeId' => ['exists:employee,emp_id'],
+            'start_date' => ['required', 'date', 'after_or_equal:today'],
+            'end_date' => ['required', 'date', 'after_or_equal:start_date'],
+        ]);
 
         if (!Gate::allows('create-leave-requests')) {
             return back()->with('error', 'Access denied!');
@@ -189,6 +199,11 @@ class LeaveController extends Controller
 
         $employee = Employee::where('emp_id', request('employeeId'))->first();
         $leaveType = LeaveType::where('name', request('leaveType'))->first();
+
+
+        $start = Carbon::createFromFormat('Y-m-d', request('start_date'));
+        $end = Carbon::createFromFormat('Y-m-d', request('end_date'));
+        $days = $end->diffInDays($start);
 
         $success = LeaveRequest::create([
             'employee_id' => $employee->id,
@@ -229,7 +244,7 @@ class LeaveController extends Controller
 
     public function createLeaveType()
     {
-        if (!Gate::allows('create-leave.types')) {
+        if (!Gate::allows('create-leaves-types')) {
             return back()->with('error', 'Access denied!');
         }
         request()->validate([
@@ -261,15 +276,15 @@ class LeaveController extends Controller
 
     public function leaveApprover(LeaveRequest $request)
     {
+
         if (!Gate::allows('update-leave-approvals')) {
             return back()->with('error', 'Access denied!');
         }
 
         $status = null;
         if (Auth::user()->userHasRole('DEP officer')) {
-            if (Auth::user()->departments != null && Employee::find($request->employee_id)->departments) {
+            if (((Auth::user()->departments->first() ?? '') != null) && ((Employee::find($request->employee_id)->departments->first() ?? '') != null)) {
                 // Check approver department head office and employee department are the same
-                // dd(Employee::find($request->employee_id)->departments->first()->full_name);
                 if (Auth::user()->departments->first()->full_name == Employee::find($request->employee_id)->departments->first()->full_name) {
                     global $status;
                     $status = Str::ucfirst(request('dep_status'));
@@ -295,6 +310,8 @@ class LeaveController extends Controller
                 } else {
                     return back()->with('error', 'This is not a request for your department!');
                 }
+            } else {
+                return back()->with('error', 'Employee department is not assigned!');
             }
         } else if (Auth::user()->userHasRole('AC officer')) {
             if ($request->isDepApprove($request->id) && $request->getDepApproval($request->id)->status == 'Approved') {
@@ -344,7 +361,21 @@ class LeaveController extends Controller
                 }
 
                 $request->status = request('hr_status'); //! here finally the request will be approved
+                $emp = $request->employee;
+                $emp->status = 'leave';
+                $emp->save();
                 $request->save();
+                $exitFrom = new LeaveExitForm([
+                    'leave_request_id' => $request->id,
+                    'is_filled' => false,
+                ]);
+
+                $user = Employee::find($request->employee_id)->user;
+
+                Notification::send($user, new UserNotifications('Your leave Request has been Approved!', $user->roles()->first()->name, route('leaves.history')));
+                session()->flash('notification', '<' . request('name') . '> Role has been created!');
+
+                $exitFrom->save();
             } else {
                 return back()->with('error', 'First, The Academics Should Give Approval!');
             }
@@ -365,7 +396,7 @@ class LeaveController extends Controller
             $approved_at = 'Human Resource';
         }
 
-        if (!Gate::allows('create-leave-approvals')) {
+        if (!Gate::allows('create-leaves-approvals')) {
             return back()->with('error', 'Access denied!');
         }
 
@@ -381,5 +412,20 @@ class LeaveController extends Controller
             return back()->with('success', 'Succeed!');
 
         return back()->with('error', 'Failed!');
+    }
+
+    public function exitFrom($id)
+    {
+
+        return view('leave.form', ['form' => LeaveExitForm::find($id)]);
+    }
+
+    public function exitFromStore()
+    {
+
+        $form = LeaveExitForm::find(request('formId'));
+        $form->is_filled = true;
+        $form->save();
+        return back()->with('success', 'succeed!');
     }
 }

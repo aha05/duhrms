@@ -5,14 +5,21 @@ namespace App\Http\Controllers;
 use Carbon\Carbon;
 use App\Models\Person;
 use App\Models\Department;
+use App\Models\User;
 use Illuminate\Support\Str;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Gate;
+use Illuminate\Support\Facades\Notification;
+use App\Notifications\AdminNotifications;
+use App\Notifications\UserNotifications;
+use Illuminate\Support\Facades\Auth;
 
 class PersonController extends Controller
 {
     public function index()
     {
+        
+
         if (!Gate::allows('create-employees')) {
             return back()->with('error', 'Access denied!');
         }
@@ -25,7 +32,7 @@ class PersonController extends Controller
         if (!Gate::allows('create-employees')) {
             return back()->with('error', 'Access denied!');
         }
-        
+
         request()->validate([
             'first_name' => ['required', 'string'],
             'middle_name' => ['required', 'string'],
@@ -65,8 +72,8 @@ class PersonController extends Controller
             'educational_level' => request('educational_level')
         ]);
 
-            if($Person)
-                return back()->with('success', 'Register successfully!');
+        if ($Person)
+            return back()->with('success', 'Register successfully!');
 
         return back()->with('error', 'Unable to Register!');
     }
@@ -76,16 +83,62 @@ class PersonController extends Controller
     public function details(Person $person)
     {
 
-        return view('employee.datails', ['person'=>$person]);
+        return view('employee.datails', ['person' => $person]);
     }
 
     public function destroy(Person $person)
     {
         $success = $person->delete();
-        if($success)
+        if ($success)
             session()->flash('success', '<' . $person->first_name . '> The person has been deleted!');
         else
             session()->flash('error', '<' . $person->first_name . '> Unable delete!');
         return back();
+    }
+
+    public function trash()
+    {
+
+        $person = Person::onlyTrashed()->get();
+
+        return view('employee.trash', ['person' => $person, 'users' => User::all()]);
+    }
+
+    public function restore($person)
+    {
+        $personRestore = Person::withTrashed()->find($person);
+        $personRestore->restore();
+
+        return back()->with('success', 'Restored successfully!');
+    }
+
+    public function remove($person)
+    {
+        $personRestore = Person::withTrashed()->find($person);
+        $personRestore->forceDelete();;
+
+        return back()->with('success', 'Removed successfully!');
+    }
+
+    public function removeAll()
+    {
+        if(Person::onlyTrashed()->get()->isEmpty()){
+            return back()->with('error', 'Nothing to Remove!');
+        }
+
+        Person::withTrashed()->forceDelete();
+
+        return back()->with('success', 'Removed successfully!');
+    }
+
+    public function restoreAll()
+    {
+        if(Person::onlyTrashed()->get()->isEmpty()){
+            return back()->with('error', 'Nothing to Restore!');
+        }
+
+        Person::withTrashed()->restore();
+
+        return back()->with('success', 'Restored successfully!');
     }
 }

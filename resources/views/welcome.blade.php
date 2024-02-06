@@ -23,11 +23,9 @@
                 <div class="row">
                     <div class="col-lg-8 text-center text-lg-start">
                         <h1 data-aos="fade-right">Dilla University Human Resource Office</h1>
-                        <p class="mb-5" data-aos="fade-right" data-aos-delay="100">Lorem ipsum dolor sit amet,
-                            consectetur
-                            adipisicing elit.</p>
+                        <p class="mb-5" data-aos="fade-right" data-aos-delay="100">University of Green Land</p>
                         <p data-aos="fade-right" data-aos-delay="200" data-aos-offset="-500"><a href="{{ route('applypage') }}"
-                                class="btn btn-outline-white">apply</a></p>
+                                class="btn btn-outline-white">Announced vacancy</a></p>
                     </div>
                     <div class="col-lg-4 iphone-wrap">
                         <img src="{{ asset('assets/img/hr3t.png') }}" alt="Image" class="phone-1"
@@ -74,12 +72,12 @@
         <div class="container">
             <div class="row align-items-center">
                 <div class="col-md-4 me-auto">
-                    <h2 class="mb-4">Apply Online</h2>
-                    <p class="mb-4">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Tenetur at
-                        reprehenderit optio,
-                        laudantium eius quod, eum maxime molestiae porro omnis. Dolores aspernatur delectus impedit
-                        incidunt
-                        dolore mollitia esse natus beatae.</p>
+                    <h2 class="mb-4">To Apply Online</h2>
+                    <p class="mb-4">First click the Announcemet navigation link, so the system
+                        redirect you to the posted jobs page, then seletct a job that
+                        maches your specification and click apply button then fill out
+                        all required fields and submit the form.
+                        </p>
 
                 </div>
                 <div class="col-md-6" data-aos="fade-left">
@@ -89,24 +87,6 @@
         </div>
     </section>
 
-    <section class="section">
-        <div class="container">
-            <div class="row align-items-center">
-                <div class="col-md-4 ms-auto order-2">
-                    <h2 class="mb-4">Check Your Result Online</h2>
-                    <p class="mb-4">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Tenetur at
-                        reprehenderit optio,
-                        laudantium eius quod, eum maxime molestiae porro omnis. Dolores aspernatur delectus impedit
-                        incidunt
-                        dolore mollitia esse natus beatae.</p>
-
-                </div>
-                <div class="col-md-6" data-aos="fade-right">
-                    <img src="{{ asset('assets/img/undraw_svg_3.svg') }}" alt="Image" class="img-fluid">
-                </div>
-            </div>
-        </div>
-    </section>
 </main><!-- End #main -->
 @endsection
 

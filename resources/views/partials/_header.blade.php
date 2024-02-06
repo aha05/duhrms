@@ -1,6 +1,7 @@
 <ul>
     <li><a class="active " href="{{ route('home') }}">Home</a></li>
     <li><a href="{{ route('about') }}">About</a></li>
+    <li><a href="{{ route('notice') }}">Notices</a></li>
     <li><a href="{{ route('applypage') }}">Announcement</a></li>
     @guest
         @if (Route::has('login'))
@@ -19,7 +20,9 @@
                              document.getElementById('logout-form').submit();">
                     {{ __('Logout') }}
                 </a>
-
+                <a class="dropdown-item text-dark" href="{{ route('admin') }}">
+                    {{ __('Dashboard') }}
+                </a>
                 <form id="logout-form" action="{{ route('logout') }}" method="POST" class="d-none">
                     @csrf
                 </form>

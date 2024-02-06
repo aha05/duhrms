@@ -20,6 +20,7 @@ return new class extends Migration
             $table->text('description');
             $table->integer('number_of_positions');
             $table->boolean('approved')->default(false); //todo change string: pending
+            $table->softDeletes();
             $table->timestamps();
 
             $table->foreign('department_id')->references('id')->on('department')->onDelete('cascade');

@@ -26,6 +26,7 @@ return new class extends Migration
             $table->bigInteger('reviewed_by')->unsigned()->nullable();
             $table->foreign('reviewed_by')->references('id')->on('employee')->onDelete('cascade');
             $table->text('review_comments')->nullable();
+            $table->softDeletes();
             $table->timestamps();
         });
     }

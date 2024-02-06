@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Feedback;
+use App\Models\Notice;
 use App\Models\PostJob;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -41,11 +42,12 @@ class HomeController extends Controller
     public function feedbackPost()
     {
         request()->validate([
-            'name' => ['required', 'string'],
+            'name' => ['required', 'regex:/^[a-zA-Z\s]+$/'],
             'email' => ['required', 'email'],
-            'phone' => ['required', 'numeric', 'digits:10'],
+            'phone' => ['required', 'regex:/^\+\d{1,3} \d{3} \d{3} \d{3}$/', 'min:10'],
             'message' => ['required'],
-        ]);
+        ], ['phone.regex' => 'The :attribute must like +251 912 345 678 and min 10 digit.',]);
+
         $hello = Feedback::create([
             'name' => Str::ucfirst(request('name')),
             'email' => request('email'),
@@ -57,14 +59,27 @@ class HomeController extends Controller
         foreach ($user as $s) {
             if ($s->userHasRole('Admin') == 1)
              {
-                Notification::send($s, new AdminNotifications('New Feedback!', $s->roles()->first()->name));
+                Notification::send($s, new AdminNotifications('New Feedback!', $s->roles()->first()->name, route('admin.feedback')));
                 session()->flash('notification', 'New Feedback!');
             }
         }
         if ($hello)
-            return redirect('/contact')->with('success', 'succeeded!');
+            return redirect('/contact')->with('success', 'Thank You, For your feedback!');
 
         return redirect('/contact')->with('error', 'invalid input!');
 
     }
+
+    public function Notices(){
+
+        return view('notices', ['all_notice' => Notice::latest()->paginate(2)]);
+    }
+
+   public function search(Request $request){
+
+        $query = $request->input('query');
+        $posts = PostJob::where('title', 'like', '%'.$query.'%')->paginate(3);
+
+        return view('applyPage', compact('posts', 'query'));
+   }
 }

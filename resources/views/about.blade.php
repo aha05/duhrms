@@ -85,7 +85,10 @@
         <div class="row align-items-center">
           <div class="col-md-4 me-auto">
             <h2 class="mb-4">Vision</h2>
-            <p class="mb-4">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Tenetur at reprehenderit optio, laudantium eius quod, eum maxime molestiae porro omnis. Dolores aspernatur delectus impedit incidunt dolore mollitia esse natus beatae.</p>
+            <p class="mb-4">Providing a full spectrum of HR consulting services, being a preferred employer and
+                provider of innovative HR services, developing and managing value-added HR policies,
+                procedures, and programs, providing staffing and recruiting services, and shaping an
+                equitable and inclusive culture.</p>
             <p><a href="#">Read More</a></p>
           </div>
           <div class="col-md-6" data-aos="fade-left">
@@ -100,7 +103,10 @@
         <div class="row align-items-center">
           <div class="col-md-4 ms-auto order-2">
             <h2 class="mb-4">Mission</h2>
-            <p class="mb-4">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Tenetur at reprehenderit optio, laudantium eius quod, eum maxime molestiae porro omnis. Dolores aspernatur delectus impedit incidunt dolore mollitia esse natus beatae.</p>
+            <p class="mb-4">Attracting and retaining top talent, developing and managing value-added HR
+                policies, procedures, and programs, implementing effective talent management strategies,
+                encouraging consistent employee engagement, and setting SMART goals.
+                </p>
             <p><a href="#">Read More</a></p>
           </div>
           <div class="col-md-6" data-aos="fade-right">
@@ -115,7 +121,10 @@
         <div class="row align-items-center">
           <div class="col-md-4 me-auto">
             <h2 class="mb-4">Goal</h2>
-            <p class="mb-4">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Tenetur at reprehenderit optio, laudantium eius quod, eum maxime molestiae porro omnis. Dolores aspernatur delectus impedit incidunt dolore mollitia esse natus beatae.</p>
+            <p class="mb-4">Creating an employee-centric culture, enhancing company culture, improving organizational
+                excellence, supporting employee wellbeing, fostering employee engagement,  reducing employee attrition,
+                prioritizing diversity, equity, and inclusion, and improving employee productivity
+                 </p>
             <p><a href="#">Read More</a></p>
           </div>
           <div class="col-md-6" data-aos="fade-left">
@@ -124,22 +133,6 @@
         </div>
       </div>
     </section>
-
-    <section class="section">
-      <div class="container">
-        <div class="row align-items-center">
-          <div class="col-md-4 ms-auto order-2">
-            <h2 class="mb-4">History </h2>
-            <p class="mb-4">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Tenetur at reprehenderit optio, laudantium eius quod, eum maxime molestiae porro omnis. Dolores aspernatur delectus impedit incidunt dolore mollitia esse natus beatae.</p>
-            <p><a href="#">Read More</a></p>
-          </div>
-          <div class="col-md-6" data-aos="fade-right">
-            <img src="{{ asset('assets/img/undraw_svg_4.svg') }}" alt="Image" class="img-fluid">
-          </div>
-        </div>
-      </div>
-    </section>
-
 
   </main><!-- End #main -->
 

@@ -22,6 +22,7 @@ return new class extends Migration
             $table->date('start_date')->default(now()->format('Y-m-d'));;
             $table->date('end_date')->default(now()->format('Y-m-d'));;
             $table->text('description');
+            $table->softDeletes();
             $table->timestamps();
         });
     }

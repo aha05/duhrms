@@ -30,6 +30,8 @@ class UserController extends Controller
         if (!Gate::allows('destroy-users')) {
             return back()->with('error', 'Access denied!');;
         }
+        if ($user->userHasRole('admin'))
+            return back()->with('error', 'Failed!');
         $user->delete();
         session()->flash('user-deleted', 'User has been deleted!');
         return back();
@@ -65,7 +67,6 @@ class UserController extends Controller
                 $user->departments()->attach(request('department')); // assign department
         }
 
-
         $user->update($data);
 
         return back();
@@ -87,8 +88,36 @@ class UserController extends Controller
             return back()->with('error', 'Access denied!');
         }
 
+        if ($user->userHasRole('admin')) {
+            return back()->with('error', 'Access denied!');
+        }
+
         $user->roles()->detach(request('role'));
 
+        return back();
+    }
+
+    public function userProfileEdit(User $user)
+    {
+
+        return view('user.userprofile', ['user' => $user, 'department' => Department::all()]);
+    }
+
+    public function userProfileUpdate(User $user)
+    {
+
+        $data = request()->validate([
+            'name' => ['required', 'string', 'max:255'],
+            'email' => ['required', 'string', 'email', 'max:255'],
+            'password' => ['required', 'string', 'min:8', 'confirmed'],
+            'avatar' => ['file'],
+        ]);
+        if (request('avatar')) {
+            $str = request('avatar')->store('public/images');
+            $data['avatar'] = substr($str, 14);
+        }
+
+        $user->update($data);
         return back();
     }
 }

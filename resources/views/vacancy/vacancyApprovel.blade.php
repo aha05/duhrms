@@ -11,10 +11,10 @@
         </script>
     @endif
 
-    <h3 class="p-2 mb-3">Dashboard>Vacancy><span class="text-primary">Approval</span> </h3>
+    <h3 class="p-2 mb-3">Dashboard>Vacancy> <span class="text-primary">Approval</span> </h3>
 
     <div class="container">
-        <h2>Vacancy Request Form</h2>
+
         <form action="{{ route('vacancy.approve', $vacancyRequest) }}" class="ps-4" style="padding-right: 20%" method="POST">
             @csrf
             <div class="row">

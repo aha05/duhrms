@@ -37,6 +37,11 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/2.0.1/js/toastr.js"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
     <link rel="stylesheet" href="{{ asset('assets/css/experience.css') }}">
+    <link rel="stylesheet" href="{{ asset('css/core.css') }}">
+    <link rel="stylesheet" href="{{ asset('css/icons.css') }}">
+    <link rel="stylesheet" href="{{ asset('css/menu.css') }}">
+
+
     <!-- Scripts -->
     <link rel="stylesheet" href="{{ asset('css/bootstrap.css') }}">
     <script src="{{ asset('js/bootstraps.js') }}"></script>
@@ -44,10 +49,10 @@
     <script src="{{ asset('toaster/jquery-migrate.js') }}"></script>
     <link href="{{ asset('toaster/toaster.css') }}" rel="stylesheet" />
     <script src="{{ asset('toaster/toaster.js') }}"></script>
+
 </head>
 
 <body id="page-top">
-
     <!-- Page Wrapper -->
     <div id="wrapper">
 
@@ -68,7 +73,7 @@
                 <!-- Begin Page Content -->
                 <div class="container-fluid">
                     <div id="app">
-                        {{-- @include('partials._preloader') --}}
+                        @include('partials._preloader')
                         <!-- Page Heading -->
                         @yield('content')
 
@@ -136,7 +141,7 @@
         <!-- Charts.js -->
         <script src="{{ asset('js/chart.min.js') }}"></script>
         <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
-
+    </div>
 
 </body>
 

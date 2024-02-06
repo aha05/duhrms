@@ -15,7 +15,9 @@ use Illuminate\Support\Str;
 use App\Models\Compensation;
 use Illuminate\Http\Request;
 use App\Models\EducationalInfo;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Gate;
+use PHPUnit\TextUI\XmlConfiguration\Php;
 
 class EmployeeController extends Controller
 {
@@ -33,7 +35,7 @@ class EmployeeController extends Controller
             'last_name' => ['required', 'alpha'],
             'email' => ['required', 'email', 'unique:people'],
             'gender' => ['required', 'in:Male,male,Female,female,F,M'],
-            'date_of_birth' => ['required', 'date'],
+            'date_of_birth' => ['required', 'date', 'before:' . \Carbon\Carbon::now()->subYears(18)->format('Y-m-d')],
             'phone' => ['required', 'numeric', 'digits:10', 'unique:people'],
             'religion' => ['required'],
             'marital_status' => ['required'],
@@ -65,8 +67,8 @@ class EmployeeController extends Controller
 
             'company' => ['required'],
             'position' => ['required'],
-            'start_date' => ['required', 'date'],
-            'end_date' => ['required', 'date'],
+            'start_date' => ['required', 'date', 'before_or_equal:today'],
+            'end_date' => ['required', 'date', 'before_or_equal:today'],
             'description' => ['required'],
 
             'job_title' => ['required'],
@@ -159,8 +161,28 @@ class EmployeeController extends Controller
         return back()->with('error', 'Unable to Register!');
     }
 
+    public function employeeProfile()
+    {
+        $employee = Auth::user()->employee;
+        $person = $employee->person ?? '';
+
+        return view('employee.employee', ['person' => $person, 'users' => User::all()]);
+    }
+
     public function index()
     {
+        if (Auth::user()->userHasRole('DEP officer')) {
+
+            $person  = collect();
+            foreach (Employee::all()->sortByDesc('created_at') as $item) {
+                if ($item->departments()->first()->full_name ?? '' != null) {
+                    if ($item->departments()->first()->full_name == Auth::user()->departments()->first()->full_name)
+                        $person->push($item->person);
+                }
+            }
+            return view('employee.allemployee', ['person' => $person, 'users' => User::all()]);
+        }
+
 
         if (!Gate::allows('view-employees-lists')) {
 
@@ -168,6 +190,13 @@ class EmployeeController extends Controller
         }
 
         return view('employee.allemployee', ['person' => Person::all(), 'users' => User::all()]);
+    }
+    public function show(Person $person)
+    {
+        $employee  = $person->employee;
+        $contact = $employee->contactInfo->first();
+
+        return view('employee.readOnly', ['person' => $person, 'employee' => $employee, 'contact' => $contact, 'department' => Department::all()]);
     }
 
     public function details(Person $person)
@@ -184,7 +213,7 @@ class EmployeeController extends Controller
             return back()->with('error', 'Access denied!');
         }
 
-         $status = request()->validate([
+        $status = request()->validate([
             'photo' => ['required', 'file'],
             'first_name' => ['required', 'alpha'],
             'middle_name' => ['required', 'alpha'],
@@ -294,8 +323,12 @@ class EmployeeController extends Controller
 
         $success = $employee->update($data);
 
-        $employee->departments()->update(['department_id' => request('department'), 'employee_id' => $employee->id]); //! change department
-        // $employee->departments()->attach(request('department')); // assign department
+        if ($employee->departments()->first() ?? '' != null) {
+            $employee->departments()->update(['department_id' => request('department'), 'employee_id' => $employee->id]); //! change department
+        } else {
+            $employee->departments()->attach(request('department')); // assign department
+        }
+
 
         if ($success)
             return back()->with('success', 'Update successfully!');
@@ -377,7 +410,7 @@ class EmployeeController extends Controller
         return back()->with('error', 'Failed!');
     }
 
-    public function editEducation(EducationalInfo $education)
+    public function editEducation($emp_id)
     {
         if (!Gate::allows('update-employees')) {
             return back()->with('error', 'Access denied!');
@@ -387,10 +420,11 @@ class EmployeeController extends Controller
             'institution' => ['required'],
             'field' => ['required'],
             'level' => ['required'],
-            'graduation' => ['required'],
+            'year_of_graduation' => ['required'],
             'GPA'  => ['required'],
         ]);
 
+        $education = Employee::find($emp_id)->educationalInfo->find(request('edu_id'));
         $success = $education->update($data);
 
         if ($success)
@@ -422,6 +456,29 @@ class EmployeeController extends Controller
         return back()->with('error', 'Failed!');
     }
 
+    public function editExperience($id)
+    {
+        if (!Gate::allows('update-employees')) {
+            return back()->with('error', 'Access denied!');
+        }
+
+        $data = request()->validate([
+            'company' => ['required'],
+            'position' => ['required'],
+            'start_date' => ['required'],
+            'end_date' => ['required'],
+            'description'  => ['required'],
+        ]);
+
+        $experience = Employee::find($id)->experience->find(request('exp_id'));
+        $success = $experience->update($data);
+
+        if ($success)
+            return back()->with('success', 'Succeed!');
+
+        return back()->with('error', 'Failed!');
+    }
+
     public function editBank(Employee $employee)
     {
         if (!Gate::allows('update-employees')) {
@@ -443,5 +500,14 @@ class EmployeeController extends Controller
             return back()->with('success', 'Succeed!');
 
         return back()->with('error', 'Failed!');
+    }
+
+    public function changeEmployeeStatus($id){
+
+            $employee = Employee::find($id);
+            $employee->status = request('status');
+            $suceess = $employee->save();
+
+        return back()->with('success', 'succeed!');
     }
 }

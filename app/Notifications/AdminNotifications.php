@@ -18,13 +18,13 @@ class AdminNotifications extends Notification
      */
     private $name;
     private $role;
-    // private $goto; //! should be the route name
+    private $link; //! should be the route name
 
-    public function __construct($name, $role)
+    public function __construct($name, $role, $link)
     {
         $this->name = $name;
         $this->role = $role;
-        // $this->goto = $goto; //! this will be the page to be opened when notification is clicked
+        $this->link = $link; //! this will be the page to be opened when notification is clicked
     }
 
     /**
@@ -63,7 +63,7 @@ class AdminNotifications extends Notification
         return [
             'name' => $this->name,
             'role' => $this->role,
-            // 'goto' => $this->goto,
+            'link' => $this->link,
         ];
     }
 

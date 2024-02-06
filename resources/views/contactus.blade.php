@@ -52,16 +52,6 @@
 </head>
 
 <body>
-    @if (session()->has('error'))
-        <script>
-            toastr.error('{{ session('error') }}');
-        </script>
-    @endif
-    @if (session()->has('success'))
-        <script>
-            toastr.success('{{ session('success') }}');
-        </script>
-    @endif
     <!-- ======= Header ======= -->
     <header id="header" class="fixed-top d-flex align-items-center">
         <div class="container d-flex justify-content-between align-items-center">
@@ -130,8 +120,10 @@
                         <div class="contact-info">
                             <h3 class="title">Let's get in touch</h3>
                             <p class="text">
-                                Lorem ipsum dolor sit, amet consectetur adipisicing elit. Iusto
-                                consequuntur culpa animi corrupti dolorum quod.
+
+                            Thank you for reaching out to us. We value your feedback, inquiries, and suggestions.
+                             Please use the contact information provided below to get in touch with our team.
+                             We are here to assist you and will respond as promptly as possible.
                             </p>
 
                             <div class="info">
@@ -157,29 +149,85 @@
 
                             <form method="POST" action="{{ route('feedback') }}">
                                 @csrf
-
+                                @if (session()->has('success'))
+                                    <div class="alert alert-light text-success">{{ session('success') }}</div>
+                                @endif
+                                @if (session()->has('error'))
+                                    <div class="alert alert-danger">{{ session('error') }}</div>
+                                @endif
                                 <h3 class="title">Contact Us</h3>
-                                <div class="input-container">
-                                    <input type="text" name="name" class="input" />
-                                    <label for="">Name</label>
-                                    <span>Name</span>
+
+                                <div class="row mb-3">
+                                    <label for="name"
+                                        class="col-md-3 col-form-label text-md-end text-light">{{ __('Name') }}</label>
+
+                                    <div class="col-md-8">
+                                        <input id="name" type="text"
+                                            class="input form-control @error('name') is-invalid @enderror"
+                                            name="name" value="{{ old('name') }}" autocomplete="name"
+                                            autofocus>
+
+                                        @error('name')
+                                            <span class="invalid-feedback" role="alert">
+                                                <strong>{{ $message }}</strong>
+                                            </span>
+                                        @enderror
+                                    </div>
                                 </div>
-                                <div class="input-container">
-                                    <input type="email" name="email" class="input" />
-                                    <label for="">Email</label>
-                                    <span>Email</span>
+
+                                <div class="row mb-3">
+                                    <label for="email"
+                                        class="col-md-3 col-form-label text-md-end text-light">{{ __('Email') }}</label>
+
+                                    <div class="col-md-8">
+                                        <input id="email" type="email"
+                                            class="input form-control @error('email') is-invalid @enderror"
+                                            name="email" value="{{ old('email') }}" autocomplete="email"
+                                            autofocus>
+
+                                        @error('email')
+                                            <span class="invalid-feedback" role="alert">
+                                                <strong>{{ $message }}</strong>
+                                            </span>
+                                        @enderror
+                                    </div>
                                 </div>
-                                <div class="input-container">
-                                    <input type="tel" name="phone" class="input" />
-                                    <label for="">Phone</label>
-                                    <span>Phone</span>
+
+                                <div class="row mb-3">
+                                    <label for="phone"
+                                        class="col-md-3 col-form-label text-md-end text-light">{{ __('Phone') }}</label>
+
+                                    <div class="col-md-8">
+                                        <input id="phone" type="phone"
+                                            class="input form-control @error('phone') is-invalid @enderror"
+                                            name="phone" value="{{ old('phone') }}" autocomplete="phone"
+                                            autofocus>
+
+                                        @error('phone')
+                                            <span class="invalid-feedback" role="alert">
+                                                <strong>{{ $message }}</strong>
+                                            </span>
+                                        @enderror
+                                    </div>
                                 </div>
-                                <div class="input-container textarea">
-                                    <textarea name="message" class="input"></textarea>
-                                    <label for="">Message</label>
-                                    <span>Message</span>
+
+                                <div class="row mb-3">
+                                    <label for="message"
+                                        class="col-md-3 col-form-label text-md-end text-light">{{ __('Message') }}</label>
+
+                                    <div class="col-md-8">
+                                        <textarea id="message" type="message" class="input form-control @error('message') is-invalid @enderror"
+                                            name="message" value="{{ old('message') }}" autocomplete="message" autofocus rows="3"></textarea>
+
+                                        @error('message')
+                                            <span class="invalid-feedback" role="alert">
+                                                <strong>{{ $message }}</strong>
+                                            </span>
+                                        @enderror
+                                    </div>
                                 </div>
-                                <input type="submit" value="Send" class="btn" />
+
+                                <input type="submit" value="Send" class="btn" style="margin-left: 30%" />
                             </form>
                         </div>
                     </div>

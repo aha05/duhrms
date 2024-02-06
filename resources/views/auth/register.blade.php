@@ -15,11 +15,28 @@
         <div class="row justify-content-center">
             <div class="col-md-8">
                 <div class="card">
-                    <div class="card-header">{{ __('Register') }}</div>
+                    <div class="p-2 card-title text-center text-bold fs-4">
+                        <span class="text-primary">
+                            {{ __('Register') }}
+                        </span>
+                    </div>
 
                     <div class="card-body">
                         <form method="POST" action="{{ route('register') }}">
                             @csrf
+                            <div class="row mb-3">
+                                <label for="employeeId" class="col-md-4 col-form-label text-md-end">{{ __('Employee Id') }}</label>
+
+                                <div class="col-md-6">
+                                    <input id="employeeId" type="text" class="form-control @error('employeeId') is-invalid @enderror" name="employeeId" value="{{ old('employeeId') }}" required autocomplete="employeeId" autofocus>
+
+                                    @error('employeeId')
+                                        <span class="invalid-feedback" role="alert">
+                                            <strong>{{ $message }}</strong>
+                                        </span>
+                                    @enderror
+                                </div>
+                            </div>
                             <div class="row mb-3">
                                 <label for="name" class="col-md-4 col-form-label text-md-end">{{ __('Name') }}</label>
 
@@ -51,6 +68,7 @@
                                     @enderror
                                 </div>
                             </div>
+
                             <div class="row mb-3">
                                 <label for="department"
                                     class="col-md-4 col-form-label text-md-end">{{ __('Department') }}</label>
@@ -75,6 +93,29 @@
                                 </div>
                             </div>
                             <div class="row mb-3">
+                                <label for="role" class="col-md-4 col-form-label text-md-end">{{ __('Role') }}</label>
+
+                                <div class="col-md-6">
+
+                                    <select id="role" class="form-control @error('role') is-invalid @enderror"
+                                    name="role" value="{{ old('role') }}" autocomplete="role"
+                                    >
+                                    <option value="">Select Role</option>
+                                    @foreach ($roles as $item)
+                                        <option value="{{ $item->id }}"
+                                            {{ $item->name == '_' ? 'selected' : '' }}>{{ $item->name }}
+                                        </option>
+                                    @endforeach
+                                </select>
+                                    @error('role')
+                                        <span class="invalid-feedback" role="alert">
+                                            <strong>{{ $message }}</strong>
+                                        </span>
+                                    @enderror
+                                </div>
+                            </div>
+
+                            <div class="row mb-3">
                                 <label for="password"
                                     class="col-md-4 col-form-label text-md-end">{{ __('Password') }}</label>
 
@@ -88,19 +129,6 @@
                                             <strong>{{ $message }}</strong>
                                         </span>
                                     @enderror
-                                </div>
-                            </div>
-
-                            <div class="row mb-3">
-                                <div class="col-md-6 offset-md-4">
-                                    <div class="form-check">
-                                        <input class="form-check-input" type="checkbox" name="remember" id="remember"
-                                            {{ old('remember') ? 'checked' : '' }}>
-
-                                        <label class="form-check-label" for="remember">
-                                            {{ __('Remember Me') }}
-                                        </label>
-                                    </div>
                                 </div>
                             </div>
 

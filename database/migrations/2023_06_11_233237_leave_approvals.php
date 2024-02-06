@@ -20,6 +20,7 @@ return new class extends Migration
             $table->string('approved_at');
             $table->string('status');
             $table->text('comments');
+            $table->softDeletes();
             $table->timestamps();
 
             $table->foreign('approver_id')->references('id')->on('users')->onDelete('cascade');

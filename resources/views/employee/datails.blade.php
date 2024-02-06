@@ -78,22 +78,22 @@
                     <div class="col-5 ms-4">
                         <div class="row mt-1">
                             <span class="col-4">Employee ID:</span>
-                            <span class="col-7">{{ $employee->emp_id }}</span>
+                            <span class="col-7">{{ $employee->emp_id ?? '' }}</span>
                         </div>
                         <div class="row mt-1">
                             <span class="col-4">First Name:</span>
-                            <span class="col-7">{{ $person->first_name }}</span>
+                            <span class="col-7">{{ $person->first_name ?? '' }}</span>
                         </div>
                         <div class="row mt-1">
                             <span class="col-4">Last Name:</span>
-                            <span class="col-7">{{ $person->last_name }}</span>
+                            <span class="col-7">{{ $person->last_name ?? '' }}</span>
                         </div>
-                        <button class="mt-3 btn btn-primary">Message</button>
+
                     </div>
                     <div class="col-5">
                         <div class="row mt-1">
                             <span class="col-4">Date of Brith:</span>
-                            <span class="col-6">{{ $person->DOB }}</span>
+                            <span class="col-6">{{ $person->DOB->format('F d, Y') ?? '' }}</span>
                             <button type="button" data-bs-toggle="modal" data-bs-target="#exampleModal"
                                 class="btn icon-button bg-light bg-gradient">
                                 <i class="fas fa-edit edit-icon"></i>
@@ -101,19 +101,19 @@
                         </div>
                         <div class="row mt-1">
                             <span class="col-4">Gender:</span>
-                            <span class="col-7">{{ $person->gender }}</span>
+                            <span class="col-7">{{ $person->gender ?? '' }}</span>
                         </div>
                         <div class="row mt-1">
                             <span class="col-4">Email:</span>
-                            <span class="col-7">{{ $person->email }}</span>
+                            <span class="col-7">{{ $person->email ?? '' }}</span>
                         </div>
                         <div class="row mt-1">
                             <span class="col-4">phone:</span>
-                            <span class="col-7">{{ $person->phone }}</span>
+                            <span class="col-7">{{ $person->phone ?? '' }}</span>
                         </div>
                         <div class="row mt-1">
                             <span class="col-4">Nationality:</span>
-                            <span class="col-7">{{ $person->nationality }}</span>
+                            <span class="col-7">{{ $person->nationality ?? '' }}</span>
                         </div>
                     </div>
                 </div>
@@ -139,11 +139,11 @@
                     <div class="card-body">
                         <div class="mb-2 row">
                             <span class="col-5 text-bold">Religion:</span>
-                            <span class="col-7">{{ $person->region }}</span>
+                            <span class="col-7">{{ $person->region ?? '' }}</span>
                         </div>
                         <div class="mb-2 row">
                             <span class="col-5 text-bold">Marital status:</span>
-                            <span class="col-7">{{ $person->marital_status }}</span>
+                            <span class="col-7">{{ $person->marital_status ?? '' }}</span>
                         </div>
                         <div class="mb-2 row">
                             <span class="col-5 text-bold">No. of children:</span>
@@ -151,19 +151,19 @@
                         </div>
                         <div class="mb-2 row">
                             <span class="col-5 text-bold">Region:</span>
-                            <span class="col-7">{{ $person->region }}</span>
+                            <span class="col-7">{{ $person->region ?? '' }}</span>
                         </div>
                         <div class="mb-2 row">
                             <span class="col-5 text-bold">Zone:</span>
-                            <span class="col-7">{{ $person->zone }}</span>
+                            <span class="col-7">{{ $person->zone ?? '' }}</span>
                         </div>
                         <div class="mb-2 row">
                             <span class="col-5 text-bold">Woreda:</span>
-                            <span class="col-7">{{ $person->woreda }}</span>
+                            <span class="col-7">{{ $person->woreda ?? '' }}</span>
                         </div>
                         <div class="mb-2 row">
                             <span class="col-5 text-bold">Kebele:</span>
-                            <span class="col-7">{{ $person->kebele }}</span>
+                            <span class="col-7">{{ $person->kebele ?? '' }}</span>
                         </div>
                     </div>
                 </div>
@@ -174,7 +174,7 @@
                 <div class="card h-100">
                     <div class="row mt-2 ms-2">
                         <div class="col-9 text-bold">
-                            Contact Information
+                            Emergnecy Contact Information
                         </div>
                         <div class="col-3">
                             <button type="button" data-bs-toggle="modal" data-bs-target="#contactInfo"
@@ -190,27 +190,27 @@
                         </div>
                         <div class="row mb-2">
                             <span class="col-5 text-bold">Last Name:</span>
-                            <span class="col-7">{{ $employee->contactInfo->first()->last_name }}</span>
+                            <span class="col-7">{{ $employee->contactInfo->first()->last_name ?? '' }}</span>
                         </div>
                         <div class="row mb-2">
                             <span class="col-5 text-bold">Gender:</span>
-                            <span class="col-7">{{ $employee->contactInfo->first()->gender }}</span>
+                            <span class="col-7">{{ $employee->contactInfo->first()->gender ?? '' }}</span>
                         </div>
                         <div class="row mb-2">
                             <span class="col-5 text-bold">Email:</span>
-                            <span class="col-7">{{ $employee->contactInfo->first()->email }}</span>
+                            <span class="col-7">{{ $employee->contactInfo->first()->email ?? '' }}</span>
                         </div>
                         <div class="row mb-2">
                             <span class="col-5 text-bold">Phone:</span>
-                            <span class="col-7">{{ $employee->contactInfo->first()->phone }}</span>
+                            <span class="col-7">{{ $employee->contactInfo->first()->phone ?? '' }}</span>
                         </div>
                         <div class="row mb-2">
                             <span class="col-5 text-bold">Adderess:</span>
-                            <span class="col-7">{{ $employee->contactInfo->first()->address }}</span>
+                            <span class="col-7">{{ $employee->contactInfo->first()->address ?? '' }}</span>
                         </div>
                         <div class="row mb-2">
                             <span class="col-5 text-bold">Relationship:</span>
-                            <span class="col-7">{{ $employee->contactInfo->first()->relationship }}</span>
+                            <span class="col-7">{{ $employee->contactInfo->first()->relationship ?? '' }}</span>
                         </div>
                     </div>
                 </div>
@@ -239,26 +239,26 @@
                             <span class="col-5 text-bold">Department:</span>
                             <span class="col-7">
                                 @if ($employee->departments != null)
-                                    {{ $employee->departments->first()->full_name }}
+                                    {{ $employee->departments->first()->full_name ?? '' }}
                                 @endif
                             </span>
                         </div>
                         <div class="row mb-2">
                             <span class="col-5 text-bold">Position:</span>
-                            <span class="col-7">{{ $employee->position }}</span>
+                            <span class="col-7">{{ $employee->position ?? '' }}</span>
                         </div>
                         <div class="row mb-2">
                             <span class="col-5 text-bold">Employment type:</span>
-                            <span class="col-7">{{ $employee->employment_type }}</span>
+                            <span class="col-7">{{ $employee->employment_type ?? '' }}</span>
                         </div>
 
                         <div class="row mb-2">
                             <span class="col-5 text-bold">Date of hire:</span>
-                            <span class="col-7">{{ $employee->date_of_hire }}</span>
+                            <span class="col-7">{{ $employee->date_of_hire ?? '' }}</span>
                         </div>
                         <div class="row mb-2">
                             <span class="col-5 text-bold">Location:</span>
-                            <span class="col-7">{{ $employee->location }}</span>
+                            <span class="col-7">{{ $employee->location ?? '' }}</span>
                         </div>
                     </div>
                 </div>
@@ -332,32 +332,7 @@
                     <div class="card-body">
                         <div class="experience-box">
                             <ul class="experience-list">
-                                <li>
-                                    <div class="experience-user">
-                                        <div class="before-circle"></div>
-                                    </div>
-                                    <div class="experience-content">
-                                        <div class="timeline-content row">
-                                            <div class="col-9">
-                                                <a href="#/" class="name">International College of Arts and
-                                                    Science
-                                                    (UG)</a>
-                                                <div>Bsc Computer Science</div>
-                                                <span class="time">2000 - 2003</span>
-                                            </div>
-                                            <div class="col-3">
-                                                <button type="button" data-bs-toggle="modal"
-                                                    data-bs-target="#EducationalInfoEidt"
-                                                    class="btn icon-button bg-light bg-gradient">
-                                                    <i class="fas fa-edit edit-icon"></i>
-                                                </button>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </li>
-
                                 @foreach ($employee->educationalInfo as $edus)
-                                @include('partials._modal', ['edus'=>$employee->educationalInfo->find($edus->id)])
                                     <li>
                                         <div class="experience-user">
                                             <div class="before-circle"></div>
@@ -372,7 +347,7 @@
                                                     <div>
                                                         {{ $edus->level . ' ' . $edus->field ?? 'Bsc Computer Science' }}
                                                     </div>
-                                                    <span class="time">2000 - 2003</span>
+                                                    <span class="time"></span>
                                                 </div>
                                                 <div class="col-3">
                                                     <a type="button" data-bs-toggle="modal"
@@ -410,46 +385,6 @@
                     <div class="card-body">
                         <div class="experience-box">
                             <ul class="experience-list">
-                                <li>
-                                    <div class="experience-user">
-                                        <div class="before-circle"></div>
-                                    </div>
-                                    <div class="experience-content">
-                                        <div class="timeline-content row">
-                                            <div class="col-10">
-                                                <a href="#/" class="name">Web Designer at Ron-tech</a>
-                                                <span class="time">Jan 2013 - Present (5 years 2 months)</span>
-                                            </div>
-                                            <div class="col-2">
-                                                <button type="button" data-bs-toggle="modal"
-                                                    data-bs-target="#experienceInfoEdit"
-                                                    class="btn icon-button bg-light bg-gradient">
-                                                    <i class="fas fa-edit edit-icon"></i>
-                                                </button>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </li>
-                                <li>
-                                    <div class="experience-user">
-                                        <div class="before-circle"></div>
-                                    </div>
-                                    <div class="experience-content">
-                                        <div class="timeline-content row">
-                                            <div class="col-10">
-                                                <a href="#/" class="name">Web Designer at Ron-tech</a>
-                                                <span class="time">Jan 2013 - Present (5 years 2 months)</span>
-                                            </div>
-                                            <div class="col-2">
-                                                <button type="button" data-bs-toggle="modal"
-                                                    data-bs-target="#experienceInfoEdit"
-                                                    class="btn icon-button bg-light bg-gradient">
-                                                    <i class="fas fa-edit edit-icon"></i>
-                                                </button>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </li>
                                 @foreach ($employee->experience as $item)
                                     <li>
                                         <div class="experience-user">
@@ -461,8 +396,10 @@
                                                     <a href="#/"
                                                         class="name">{{ $item->position . ' at' . ' ' . $item->company ?? 'Web Designer at Ron-tech' }}</a>
                                                     <span
-                                                        class="time">{{ $item->start_date . ' -' . ' ' . $item->end_date . ' (' }}Jan
-                                                        2013 - Present (5 years 2 months)</span>
+                                                        class="time">{{ $item->start_date->format('F d, Y') . ' -' . ' ' . $item->end_date->format('F d, Y') }}
+                                                        -
+                                                        ({{ $item->end_date->diffInYears($item->start_date) . ' Years' }})
+                                                    </span>
                                                 </div>
                                                 <div class="col-2">
                                                     <button type="button" data-bs-toggle="modal"
@@ -961,7 +898,7 @@
                 </div>
                 <div class="modal-body">
 
-                    <form action="{{ route('experience.add', $employee)}}" class="p-5 pt-1" method="post">
+                    <form action="{{ route('experience.add', $employee) }}" class="p-5 pt-1" method="post">
                         @csrf
                         <div class="row">
                             <div class="mb-2 col-6 form-group">
@@ -1012,23 +949,31 @@
                         @method('PUT')
                         <div class="form-group">
                             <label for="full_name">Full Name:</label>
-                            <input type="text" id="full_name" name="full_name" value="{{ $employee->bankInfo->full_name }}" class="form-control" required>
+                            <input type="text" id="full_name" name="full_name"
+                                value="{{ $employee->bankInfo->full_name }}" class="form-control" required>
                         </div>
                         <div class="form-group">
                             <label for="bankName">Bank Name:</label>
-                            <input type="text" id="bankName" name="bank_name" value="{{ $employee->bankInfo->bank_name }}" class="form-control" required>
+                            <input type="text" id="bankName" name="bank_name"
+                                value="{{ $employee->bankInfo->bank_name }}" class="form-control" required>
                         </div>
                         <div class="form-group">
                             <label for="accountNumber">Account Number:</label>
-                            <input type="tel" id="accountNumber" name="account_number" value="{{ $employee->bankInfo->account_number }}" class="form-control" required>
+                            <input type="tel" id="accountNumber" name="account_number"
+                                value="{{ $employee->bankInfo->account_number }}" class="form-control" required>
                         </div>
                         <div class="form-group">
                             <label for="accountType">Account Type:</label>
                             <select id="accountType" name="account_type" class="form-control" required>
                                 <option value="">Select Account Type</option>
-                                <option value="Checking" {{ $employee->bankInfo->account_type == 'Checking' ? 'selected' : '' }}>Checking</option>
-                                <option value="Savings" {{ $employee->bankInfo->account_type == 'Savings' ? 'selected' : '' }}>Savings</option>
-                                <option value="Other" {{ $employee->bankInfo->account_type == 'Other' ? 'selected' : '' }}>Other</option>
+                                <option value="Checking"
+                                    {{ $employee->bankInfo->account_type == 'Checking' ? 'selected' : '' }}>Checking
+                                </option>
+                                <option value="Savings"
+                                    {{ $employee->bankInfo->account_type == 'Savings' ? 'selected' : '' }}>Savings
+                                </option>
+                                <option value="Other"
+                                    {{ $employee->bankInfo->account_type == 'Other' ? 'selected' : '' }}>Other</option>
 
                             </select>
                         </div>
@@ -1037,6 +982,124 @@
                     <button type="submit" class="btn btn-primary">Update</button>
                 </div>
                 </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Educational Information Edit -->
+    <div class="modal fade" id="EducationalInfoEidt" tabindex="-1" aria-labelledby="exampleModalLabel"
+        aria-hidden="true">
+        <div class="modal-dialog modal-lg " style="height: 15rem;">
+            <div class="modal-content">
+                <div class="modal-header border-0">
+                    <h4 class="modal-title text-bold ms-4" id="exampleModalLabel">Eucational Information</h4>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body overflow-y">
+
+                    @foreach ($employee->educationalInfo as $edu_info)
+                        <hr>
+                        <h5 class="text-center text-primary"> <span>Eucational Information</span></h5>
+                        <form action="{{ route('update.education', $employee->id) }}" class="p-5 pt-1" method="post">
+                            @csrf
+                            @method('PUT')
+                            <input type="text" name="edu_id" value="{{ $edu_info->id }}" style="display: none">
+                            <div class="mb-2 form-group">
+                                <label for="institution">University/College:</label>
+                                <input type="text" id="institution" name="institution" class="form-control"
+                                    value="{{ $edu_info->institution }}" required>
+                            </div>
+                            <div class="row">
+                                <div class="mb-2 col-md-6 form-group">
+                                    <label for="field">Field:</label>
+                                    <input type="text" id="field" name="field" class="form-control"
+                                        value="{{ $edu_info->field }}" required>
+                                </div>
+                                <div class="mb-2 col-md-6 form-group">
+                                    <label for="level">{{ __('Level:') }}</label>
+                                    <select id="level" name="level" class="form-control" required>
+                                        <option value="">Select Level</option>
+                                        <option value="Msc." {{ $edu_info->level == 'Msc.' ? 'selected' : '' }}>Msc.
+                                        </option>
+                                        <option value="Phd." {{ $edu_info->level == 'Phd.' ? 'selected' : '' }}>Phd.
+                                        </option>
+                                        <option value="Bsc." {{ $edu_info->level == 'Bsc.' ? 'selected' : '' }}>Bsc.
+                                        </option>
+                                    </select>
+                                </div>
+                            </div>
+
+                            <div class="row">
+                                <div class="mb-2 col-md-6 form-group">
+                                    <label for="year_of_graduation">Year of Graduation:</label>
+                                    <input type="number" id="year_of_graduation" name="year_of_graduation"
+                                        class="form-control" value="{{ $edu_info->year_of_graduation }}" required>
+                                </div>
+                                <div class="mb-2 col-md-6 form-group">
+                                    <label for="GPA">GPA:</label>
+                                    <input type="text" id="GPA" name="GPA" class="form-control"
+                                        value="{{ $edu_info->GPA }}" required>
+                                </div>
+                            </div>
+                            <div class="text-center">
+                                <button type="submit" class="mt-5 btn btn-primary">Update</button>
+                            </div>
+                        </form>
+                    @endforeach
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Experience Information Edit -->
+    <div class="modal fade" id="experienceInfoEdit" tabindex="-1" aria-labelledby="experienceInfoEdit"
+        aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header border-0">
+                    <h5 class="modal-title ms-4" id="experienceInfoEdit">Experience Information</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    @foreach ($employee->experience as $experience)
+                        <form action="{{ route('experience.edit', $employee->id) }}" class="p-5 pt-1" method="post">
+                            @csrf
+                            <input type="text" name="exp_id" value="{{ $experience->id }}" style="display: none">
+                            <div class="row">
+                                <div class="mb-2 col-6 form-group">
+                                    <label for="company">Company:</label>
+                                    <input type="text" id="company" name="company" class="form-control" value="{{ $experience->company }}"
+                                        required>
+                                </div>
+                                <div class="mb-2 col-6 form-group">
+                                    <label for="position">Position:</label>
+                                    <input type="text" id="position" name="position" class="form-control" value="{{ $experience->position }}"
+                                     required>
+                                </div>
+
+                            </div>
+                            <div class="row">
+                                <div class="mb-2 col-6 form-group">
+                                    <label for="start_date">Start Date:</label>
+                                    <input type="date" id="start_date" name="start_date" class="form-control" value="{{ $experience->start_date->format('Y-m-d') }}"
+                                        required>
+                                </div>
+                                <div class="mb-2 col-6 form-group">
+                                    <label for="end_date">End Date:</label>
+                                    <input type="date" id="end_date" name="end_date" class="form-control" value="{{ $experience->end_date->format('Y-m-d') }}"
+                                    required>
+                                </div>
+                            </div>
+                            <div class="mb-2 form-group">
+                                <label for="description">Description:</label>
+                                <textarea type="email" id="description" name="description" class="form-control" rows="3">{{ $experience->description }}</textarea>
+                            </div>
+                            <div class="text-center p-3">
+                                <button type="submit" class="btn btn-primary">Update</button>
+                            </div>
+                        </form>
+                    @endforeach
+                </div>
             </div>
         </div>
     </div>

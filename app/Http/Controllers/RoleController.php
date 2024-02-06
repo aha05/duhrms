@@ -49,7 +49,7 @@ class RoleController extends Controller
         }
 
         request()->validate([
-            'name' => ['required', 'string']
+            'name' => ['required', 'string', 'unique:roles']
         ]);
         $role = Role::create([
             'name' => Str::ucfirst(request('name')),
@@ -62,7 +62,7 @@ class RoleController extends Controller
         $user = User::all();
         foreach ($user as $s) {
             if ($s->userHasRole('Admin') == 1); {
-                Notification::send($s, new AdminNotifications('[' . request('name') . '] has been created!', Auth::User()->roles()->first()->name));
+                Notification::send($s, new AdminNotifications('Role [' . request('name') . '] has been created!', Auth::User()->roles()->first()->name, route('roles.all')));
                 session()->flash('notification', '<' . request('name') . '> Role has been created!');
             }
         }
@@ -75,7 +75,8 @@ class RoleController extends Controller
         if (!Gate::allows('destroy-roles')) {
             return back()->with('error', 'Access denied!');
         }
-
+        if ($role->slug == 'admin')
+            return back()->with('error', 'Failed!');
         $role->delete();
         session()->flash('role-deleted', '<' . $role->name . '> Role has been deleted!');
         return back();
@@ -98,14 +99,25 @@ class RoleController extends Controller
         if (!Gate::allows('update-roles')) {
             return back()->with('error', 'Access denied!');
         }
+        if ($role->slug == 'admin')
+            return back()->with('error', 'Failed!');
 
         request()->validate([
             'name' => ['required', 'string']
         ]);
 
+
         $role->name = Str::ucfirst(request('name'));
         $role->slug = Str::of(Str::lower(request('name')))->slug('-');
-        if ($role->isDirty('name')) {
+
+        $role->permissions()->detach();
+        $permissions = request()->input('permissions', []);
+        $role->permissions()->attach($permissions);
+
+
+
+
+        if ($role->isDirty('name') || $permissions != []) {
             session()->flash('role-updated', ' Role updated: ' . $role->name);
             $role->save();
         } else {
@@ -121,6 +133,11 @@ class RoleController extends Controller
             return back()->with('error', 'Access denied!');
         }
 
+        if ($role->slug == 'admin') {
+            return back()->with('error', 'Access denied!');
+        }
+
+
         $role->permissions()->attach(request('permission'));
         return back();
     }
@@ -128,6 +145,10 @@ class RoleController extends Controller
     public function detachPermission(Role $role)
     {
         if (!Gate::allows('update-roles')) {
+            return back()->with('error', 'Access denied!');
+        }
+
+        if ($role->slug == 'admin') {
             return back()->with('error', 'Access denied!');
         }
 

@@ -21,6 +21,7 @@ return new class extends Migration
             $table->string('bank_name');
             $table->double('account_number');
             $table->string('account_type');
+            $table->softDeletes();
             $table->timestamps();
         });
     }

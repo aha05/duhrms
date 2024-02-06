@@ -4,10 +4,12 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class LeaveRequest extends Model
 {
     use HasFactory;
+    use SoftDeletes;
 
     protected $table = "leave_requests";
     protected $fillable = [
@@ -21,6 +23,11 @@ class LeaveRequest extends Model
         'reviewed_by',
         'review_comments',
 
+    ];
+
+    protected $casts = [
+        'start_date' => 'datetime',
+        'end_date' => 'datetime',
     ];
 
     public function employee()

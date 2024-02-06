@@ -22,6 +22,7 @@ return new class extends Migration
             $table->string('employment_type');
             $table->date('date_of_hire')->default(now()->format('Y-m-d'));
             $table->string('location');
+            $table->softDeletes();
             $table->timestamps();
             $table->foreign('person_id')->references('id')->on('people')->onDelete('cascade');
         });

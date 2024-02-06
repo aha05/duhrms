@@ -3,12 +3,14 @@
 namespace App\Http\Controllers\auth;
 
 use App\Models\User;
+use App\Models\LoginActivity;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
 use App\Providers\RouteServiceProvider;
 use Illuminate\Contracts\Session\Session;
+use Carbon\Carbon;
 
 class LoginController extends Controller
 {
@@ -58,6 +60,25 @@ class LoginController extends Controller
 
         if (Auth::attempt($credentials)) {
             $request->session()->regenerate();
+
+            if (Auth::user()->loginActivities != null) {
+                $loginActivities = [
+                    'user_id' => Auth::user()->id,
+                    'ip_address' => $request->ip(),
+                    'login_at' => Carbon::now(),
+                ];
+
+                $loginActivity = Auth::user()->loginActivities;
+                $loginActivity->update($loginActivities);
+            } else {
+                $loginActivity = new LoginActivity([
+                    'user_id' => Auth::user()->id,
+                    'ip_address' => $request->ip(),
+                    'login_at' => Carbon::now(),
+                ]);
+
+                $loginActivity->save();
+            }
 
             return redirect()->intended(route('admin'));
         }

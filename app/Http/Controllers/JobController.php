@@ -2,9 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Applicant;
 use App\Models\User;
 use \App\Models\PostJob;
-use \App\Models\ApplyJOb;
 use App\Notifications\AdminNotifications;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Notification;
@@ -15,86 +15,72 @@ class JobController extends Controller
 {
     public function index()
     {
-        // $posts = PostJob::where('end_date', '>=', Carbon::now())
-        //     ->orderBy('created_at', 'desc')
-        //    ->get();
 
         $posts = PostJob::latest()->where('end_date', '>=', Carbon::now())->paginate(3);
         return view('applypage', compact('posts'));
     }
 
-    public function applyJobGet()
+    public function applicants()
     {
 
-        return view('applyJob');
+        return view('applicant.applicants', ['applicants' => Applicant::all()]);
+    }
+
+    public function applyJobGet($id)
+    {
+        
+        return view('applyJob', ['job' => PostJob::find($id)]);
     }
 
     public function applyJobPost(Request $request)
     {
-         $request->validate([
+        $data = $request->validate([
+     
             'first_name' => 'required|alpha',
-            'last_name'=>'required|alpha',
-            'age'=>'required|integer|between:18,150',
-            'sex'=>'required|in:male,female,F,M',
-            'phone'=>'required|numeric|digits:10|unique:apply_for_job',
-            'level'=>'required|in:phd,msc,bsc',
-            'GPA'=>'required|between:2,4.00',
-            'attachment'=>'required',
+            'last_name' => 'required|alpha',
+            'age' => 'required|integer|between:18,80',
+            'sex' => 'required|in:Male,Female,F,M',
+            'phone' => 'required|regex:/^\+\d{1,3} \d{3} \d{3} \d{3}$/',
+            'level' => 'required|in:Phd.,Msc.,Bsc.',
+            'GPA' => 'required|between:2,4.00|numeric',
+            'attachment' => 'required|max:2048|mimes:pdf',
+            'numberofdoc' =>'numeric',
             'remark' => 'required',
-            'email' => 'required|email|unique:apply_for_job',
+            'email' => 'required|email',
         ]);
+        $fileName = '';
+        if ($request->file('attachment')->isValid()) {
+            $file = $request->file('attachment');
+            global $fileName;
+            $fileName = $file->getClientOriginalName();
+            $file->storeAs('uploads', $fileName);
+        }
 
-        $data['first_name'] = $request->first_name;
-        $data['last_name'] = $request->last_name;
-        $data['age'] = $request->age;
-        $data['sex'] = $request->sex;
-        $data['phone'] = $request->phone;
-        $data['level'] = $request->level;
-        $data['GPA'] = $request->GPA;
-        $data['attachment'] = $request->attachment;
-        $data['numberofdoc'] = $request->numberofdoc;
-        $data['remark'] = $request->remark;
-        $data['email'] = $request->email;
-        $success = ApplyJOb::create($data);
+        $data['attachment'] =  $fileName;
+        $data['job_id'] = request('jobId');
 
+        $jb =  PostJob::where('id', request('jobId'))->get();
+        $applied = Applicant::where('job_id', request('jobId'))->where('email', request('email'))->get();
+           
+        if($applied->first()?? '' != "")
+             return back()->with('error', 'You already applied!');
+
+        $success = Applicant::create($data);
+        if ($success ) {
+            session()->flash('success', 'successfully applied!');
+        } else{
+            session()->flash('error', 'Failed!');
+        }
+        
         // $user = User::user()->userHasRole('Admin');
         // if(Auth::user()->userHasRole('Admin')==1){
         //     Notification::send($user, new AdminNotifications($request->first_name, Auth::user()->role));
         // }
 
-        if($success){
-            return redirect('applyjob')->with('success', 'apply successfully!');
-        }
-        else{
-            return redirect('applyjob')->with('error', 'registration failed!');
-        }
-    }
-
-
-    public function postjobPost(Request $request)
-    {
-        // $request->validate([
-        //     'title' => 'required',
-        //     'department'=>'required',
-        //     'type'=>'required',
-        //     'description'=>'required',
-        //     'start_date'=>'required|date',
-        //     'end_date'=>'required|date',
-        // ]);
-
-        $data['title'] = $request->title;
-        $data['department'] = $request->department;
-        $data['type'] = $request->type;
-        $data['description'] = $request->description;
-        $data['start_date'] = $request->start_date;
-        $data['end_date'] = $request->end_date;
-        $success = PostJob::create($data);
-        if($success){
-            return back()->with('success', 'succeeded!');
-        }
-        else{
-            return back()->with('error', 'failed!');
+        if ($success) {
+            return back()->with('success', 'apply successfully!');
+        } else {
+            return back()->with('error', 'registration failed!');
         }
     }
-
 }

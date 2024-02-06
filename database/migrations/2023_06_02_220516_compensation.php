@@ -21,6 +21,7 @@ return new class extends Migration
             $table->string('pay_frequency');
             $table->double('overtime_rate');
             $table->double('bonus');
+            $table->softDeletes();
             $table->timestamps();
         });
     }

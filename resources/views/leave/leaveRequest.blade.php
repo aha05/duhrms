@@ -20,12 +20,18 @@
                         <div class="row">
                             <div class="form-group col-6">
                                 <label for="employeeId">Employee ID:</label>
-                                <input type="text" class="form-control" id="employeeId" name="employeeId" required>
+                                <input type="text" class="form-control @error('employeeId')
+                                        is-invalid
+                                @enderror" id="employeeId" name="employeeId" required>
+                                @error('employeeId')
+                                    <span class="invalid-feedback" role="alert">
+                                        {{ $message }}
+                                    </span>
+                                @enderror
                             </div>
                             <div class="form-group col-6">
                                 <label for="leaveType">Leave Type:</label>
                                 <select class="form-control" id="leaveType" name="leaveType" required>
-
                                     <option value="">Select Leave Type</option>
                                     @foreach ($leaveType as $item)
                                         <option value="{{ $item->name }}">{{ $item->name }}</option>
@@ -36,18 +42,37 @@
                         </div>
                         <div class="row">
                             <div class="form-group col-6">
-                                <label for="startDate">Start Date:</label>
-                                <input type="date" class="form-control" id="start_date" name="start_date" required>
+                                <label for="start_date">Start Date:</label>
+                                <input type="date" class="form-control @error('start_date')
+                                    is-invalid
+                                @enderror" id="start_date" name="start_date" required>
+                                @error('start_date')
+                                    <span class="invalid-feedback" role="alert">{{ $message }}</span>
+                                @enderror
                             </div>
                             <div class="form-group col-6">
                                 <label for="end_date">End Date:</label>
-                                <input type="date" class="form-control" id="end_date" name="end_date" required>
+                                <input type="date" class="form-control @error('end_date')
+                                    is-invalid
+                                @enderror" id="end_date" name="end_date" required>
+                                @error('end_date')
+                                    <span class="invalid-feedback" role="alert">
+                                        {{ $message }}
+                                    </span>
+                                @enderror
                             </div>
 
                         </div>
                         <div class="form-group">
                             <label for="reason">Reason:</label>
-                            <textarea class="form-control" id="reason" name="reason" rows="7"></textarea>
+                            <textarea class="form-control @error('reason')
+                                is-invalid
+                            @enderror" id="reason" name="reason" rows="7"></textarea>
+                            @error('reason')
+                                <span class="invalid-feedbak" role="alert">
+                                    {{ $message }}
+                                </span>
+                            @enderror
                         </div>
 
                         <button type="submit" class="btn btn-primary">Submit</button>

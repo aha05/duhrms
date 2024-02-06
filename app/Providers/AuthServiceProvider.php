@@ -2,6 +2,9 @@
 
 namespace App\Providers;
 
+
+use Illuminate\Pagination\Paginator;
+
 // use Illuminate\Support\Facades\Gate;
 use App\Models\Role;
 use App\Models\User;
@@ -162,11 +165,11 @@ class AuthServiceProvider extends ServiceProvider
         });
 
         // leave type CRUD permission
-        Gate::define('create-leave-types', function (User $user) {
+        Gate::define('create-leaves-types', function (User $user) {
             $roles = $user->roles;
             foreach ($roles as $role) {
-                if ($role->roleHasPermission('create-leave-types'))
-                    return $role->roleHasPermission('create-leave-types');
+                if ($role->roleHasPermission('create-leaves-types'))
+                    return $role->roleHasPermission('create-leaves-types');
             }
         });
 
@@ -204,7 +207,7 @@ class AuthServiceProvider extends ServiceProvider
             }
         });
 
-        Gate::define('update-leave-types', function (User $user) {
+        Gate::define('update-leave-requests', function (User $user) {
             $roles = $user->roles;
             foreach ($roles as $role) {
                 if ($role->roleHasPermission('update-leave-requests'))
@@ -212,7 +215,7 @@ class AuthServiceProvider extends ServiceProvider
             }
         });
 
-        Gate::define('destroy-leave-types', function (User $user) {
+        Gate::define('destroy-leave-requests', function (User $user) {
             $roles = $user->roles;
             foreach ($roles as $role) {
                 if ($role->roleHasPermission('destroy-leave-requests'))
@@ -229,11 +232,11 @@ class AuthServiceProvider extends ServiceProvider
         });
 
         // leave approvals CRUD permission
-        Gate::define('create-leave-approvals', function (User $user) {
+        Gate::define('create-leaves-approvals', function (User $user) {
             $roles = $user->roles;
             foreach ($roles as $role) {
-                if ($role->roleHasPermission('create-leave-approvals'))
-                    return $role->roleHasPermission('create-leave-approvals');
+                if ($role->roleHasPermission('create-leaves-approvals'))
+                    return $role->roleHasPermission('create-leaves-approvals');
             }
         });
 
@@ -262,9 +265,208 @@ class AuthServiceProvider extends ServiceProvider
         });
 
 
+        // vacancy request CRUD permission
+        Gate::define('create-vacancy-requests', function (User $user) {
+            $roles = $user->roles;
+            foreach ($roles as $role) {
+                if ($role->roleHasPermission('create-vacancy-requests'))
+                    return $role->roleHasPermission('create-vacancy-requests');
+            }
+        });
 
+        Gate::define('update-vacancy-requests', function (User $user) {
+            $roles = $user->roles;
+            foreach ($roles as $role) {
+                if ($role->roleHasPermission('update-vacancy-requests'))
+                    return $role->roleHasPermission('update-vacancy-requests');
+            }
+        });
 
+        Gate::define('destroy-vacancy-requests', function (User $user) {
+            $roles = $user->roles;
+            foreach ($roles as $role) {
+                if ($role->roleHasPermission('destroy-vacancy-requests'))
+                    return $role->roleHasPermission('destroy-vacancy-requests');
+            }
+        });
 
+        Gate::define('view-vacancy-requests-lists', function (User $user) {
+            $roles = $user->roles;
+            foreach ($roles as $role) {
+                if ($role->roleHasPermission('view-vacancy-requests-lists'))
+                    return $role->roleHasPermission('view-vacancy-requests-lists');
+            }
+        });
+
+        // Vacancy approvals CRUD permission
+        Gate::define('create-vacancy-approvals', function (User $user) {
+            $roles = $user->roles;
+            foreach ($roles as $role) {
+                if ($role->roleHasPermission('create-vacancy-approvals'))
+                    return $role->roleHasPermission('create-vacancy-approvals');
+            }
+        });
+
+        Gate::define('update-vacancy-approvals', function (User $user) {
+            $roles = $user->roles;
+            foreach ($roles as $role) {
+                if ($role->roleHasPermission('update-vacancy-approvals'))
+                    return $role->roleHasPermission('update-vacancy-approvals');
+            }
+        });
+
+        Gate::define('destroy-vacancy-approvals', function (User $user) {
+            $roles = $user->roles;
+            foreach ($roles as $role) {
+                if ($role->roleHasPermission('destroy-vacancy-approvals'))
+                    return $role->roleHasPermission('destroy-vacancy-approvals');
+            }
+        });
+
+        Gate::define('view-vacancy-approvals-lists', function (User $user) {
+            $roles = $user->roles;
+            foreach ($roles as $role) {
+                if ($role->roleHasPermission('view-vacancy-approvals-lists'))
+                    return $role->roleHasPermission('view-vacancy-approvals-lists');
+            }
+        });
+
+        // View Reports
+        Gate::define('view-reports', function (User $user) {
+            $roles = $user->roles;
+            foreach ($roles as $role) {
+                if ($role->roleHasPermission('view-reports'))
+                    return $role->roleHasPermission('view-reports');
+            }
+        });
+
+        Gate::define('generate-reports', function (User $user) {
+            $roles = $user->roles;
+            foreach ($roles as $role) {
+                if ($role->roleHasPermission('generate-reports'))
+                    return $role->roleHasPermission('generate-reports');
+            }
+        });
+
+        Gate::define('import-excels', function (User $user) {
+            $roles = $user->roles;
+            foreach ($roles as $role) {
+                if ($role->roleHasPermission('import-excels'))
+                    return $role->roleHasPermission('import-excels');
+            }
+        });
+
+        Gate::define('post-jobs', function (User $user) {
+            $roles = $user->roles;
+            foreach ($roles as $role) {
+                if ($role->roleHasPermission('post-jobs'))
+                    return $role->roleHasPermission('post-jobs');
+            }
+        });
+
+        Gate::define('destroy-jobs', function (User $user) {
+            $roles = $user->roles;
+            foreach ($roles as $role) {
+                if ($role->roleHasPermission('destroy-jobs'))
+                    return $role->roleHasPermission('destroy-jobs');
+            }
+        });
+
+        Gate::define('update-jobs', function (User $user) {
+            $roles = $user->roles;
+            foreach ($roles as $role) {
+                if ($role->roleHasPermission('update-jobs'))
+                    return $role->roleHasPermission('update-jobs');
+            }
+        });
+
+        Gate::define('view-jobs-table', function (User $user) {
+            $roles = $user->roles;
+            foreach ($roles as $role) {
+                if ($role->roleHasPermission('view-jobs-table'))
+                    return $role->roleHasPermission('view-jobs-table');
+            }
+        });
+
+        Gate::define('post-notices', function (User $user) {
+            $roles = $user->roles;
+            foreach ($roles as $role) {
+                if ($role->roleHasPermission('post-notices'))
+                    return $role->roleHasPermission('post-notices');
+            }
+        });
+
+        Gate::define('destroy-notices', function (User $user) {
+            $roles = $user->roles;
+            foreach ($roles as $role) {
+                if ($role->roleHasPermission('destroy-notices'))
+                    return $role->roleHasPermission('destroy-notices');
+            }
+        });
+
+        Gate::define('update-notices', function (User $user) {
+            $roles = $user->roles;
+            foreach ($roles as $role) {
+                if ($role->roleHasPermission('update-notices'))
+                    return $role->roleHasPermission('update-notices');
+            }
+        });
+
+        Gate::define('view-notices-table', function (User $user) {
+            $roles = $user->roles;
+            foreach ($roles as $role) {
+                if ($role->roleHasPermission('view-notices-table'))
+                    return $role->roleHasPermission('view-notices-table');
+            }
+        });
+
+        Gate::define('view-dashboard', function (User $user) {
+            $roles = $user->roles;
+            foreach ($roles as $role) {
+                if ($role->roleHasPermission('view-dashboard'))
+                    return $role->roleHasPermission('view-dashboard');
+            }
+        });
+
+        Gate::define('view-applicants', function (User $user) {
+            $roles = $user->roles;
+            foreach ($roles as $role) {
+                if ($role->roleHasPermission('view-applicants'))
+                    return $role->roleHasPermission('view-applicants');
+            }
+        });
+
+        Gate::define('approve-applicants', function (User $user) {
+            $roles = $user->roles;
+            foreach ($roles as $role) {
+                if ($role->roleHasPermission('approve-applicants'))
+                    return $role->roleHasPermission('approve-applicants');
+            }
+        });
+
+        Gate::define('view-feedbacks', function (User $user) {
+            $roles = $user->roles;
+            foreach ($roles as $role) {
+                if ($role->roleHasPermission('view-feedbacks'))
+                    return $role->roleHasPermission('view-feedbacks');
+            }
+        });
+
+        Gate::define('delete-feedbacks', function (User $user) {
+            $roles = $user->roles;
+            foreach ($roles as $role) {
+                if ($role->roleHasPermission('delete-feedbacks'))
+                    return $role->roleHasPermission('delete-feedbacks');
+            }
+        });
+
+        Gate::define('view-applicants', function (User $user) {
+            $roles = $user->roles;
+            foreach ($roles as $role) {
+                if ($role->roleHasPermission('view-applicants'))
+                    return $role->roleHasPermission('view-applicants');
+            }
+        });
 
         // Gate::define('update-post', [PostPolicy::class, 'update']);
     }

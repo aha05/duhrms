@@ -9,22 +9,24 @@
     <meta content="" name="description">
     <meta content="" name="keywords">
 
-   <!-- Favicons -->
-  <link href="{{ asset('assets/img/dulogoNew_2.png') }}" rel="icon">
+    <!-- Favicons -->
+    <link href="{{ asset('assets/img/dulogoNew_2.png') }}" rel="icon">
 
-  <!-- Google Fonts -->
-  <link href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,500,500i,600,600i,700,700i|Poppins:300,300i,400,400i,500,500i,600,600i,700,700i" rel="stylesheet">
+    <!-- Google Fonts -->
+    <link
+        href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,500,500i,600,600i,700,700i|Poppins:300,300i,400,400i,500,500i,600,600i,700,700i"
+        rel="stylesheet">
 
-  <!-- Vendor CSS Files -->
-  <link href="{{ asset('assets/vendor/aos/aos.css') }}" rel="stylesheet">
-  <link href="{{ asset('assets/vendor/bootstrap/css/bootstrap.min.css') }}" rel="stylesheet">
-  <link href="{{ asset('assets/vendor/bootstrap-icons/bootstrap-icons.css') }}" rel="stylesheet">
-  <link href="{{ asset('assets/vendor/boxicons/css/boxicons.min.css') }}" rel="stylesheet">
-  <link href="{{ asset('assets/vendor/swiper/swiper-bundle.min.css') }}" rel="stylesheet">
+    <!-- Vendor CSS Files -->
+    <link href="{{ asset('assets/vendor/aos/aos.css') }}" rel="stylesheet">
+    <link href="{{ asset('assets/vendor/bootstrap/css/bootstrap.min.css') }}" rel="stylesheet">
+    <link href="{{ asset('assets/vendor/bootstrap-icons/bootstrap-icons.css') }}" rel="stylesheet">
+    <link href="{{ asset('assets/vendor/boxicons/css/boxicons.min.css') }}" rel="stylesheet">
+    <link href="{{ asset('assets/vendor/swiper/swiper-bundle.min.css') }}" rel="stylesheet">
 
-  <!-- Template Main CSS File -->
-  <link href="{{ asset('assets/css/style.css') }}" rel="stylesheet">
-  {{-- <link rel="stylesheet" href="{{ asset('css/bootstrap.css') }}"> --}}
+    <!-- Template Main CSS File -->
+    <link href="{{ asset('assets/css/style.css') }}" rel="stylesheet">
+    {{-- <link rel="stylesheet" href="{{ asset('css/bootstrap.css') }}"> --}}
 
 </head>
 
@@ -101,9 +103,10 @@
                                 <div class="card-body text-secondary">
                                     <h5 class="card-title fw-bolder fs-2 text-dark">{{ $post->title }}</h5>
                                     <div class="row">
+
                                         <p class="card-text col-8">{{ $post->description }}</p>
-                                        <a href="{{ route('applyjob') }}"
-                                            class="btn bg-primary col-3  p-0 text-light">apply</a>
+                                        <a href="{{ route('apply.job', $post->id) }}"
+                                            class="btn bg-primary col-3  p-0 text-light">Apply</a>
                                         <div class="table">
                                             <td><span class="fw-bolder text-primary">department:</span></td>
                                             <td>{{ $post->department }}</td>
@@ -120,27 +123,13 @@
 
                     </div>
                     <div class="col-4">
-                                @if (Auth::check())
-                                    <button type="button" class="btn btn-primary mb-3 mt-4" data-bs-toggle="modal"
-                                        data-bs-target="#exampleModal">Post Job</button>
-                                @endif
-
+                        <form action="{{ route('search.job') }}" method="GET">
                             <div class="input-group w-75">
-                                <input type="search" class="form-control rounded" placeholder="Search"
+                                <input type="text" name="query" placeholder="Search..." class="form-control rounded" placeholder="Search"
                                     aria-label="Search" aria-describedby="search-addon" />
-                                <button type="button" class="btn btn-primary">search</button>
+                                <button type="submit" class="btn btn-primary">search</button>
                             </div>
-
-
-                        <div class="card mt-5 w-75 shadow">
-                            <div class="card-body">
-                                <h5 class="card-title fw-bolder fs-2">Catagories</h5>
-                                <p class="card-text">With supporting text below as a natural lead-in to additional
-                                    content.</p>
-                                <p class="card-text">With supporting text below as a natural lead-in to additional
-                                    content.</p>
-                            </div>
-                        </div>
+                        </form>
                     </div>
 
                 </div>
@@ -178,120 +167,6 @@
     <script src="{{ asset('toaster/toaster.js') }}"></script>
     @include('partials._footer')
 </body>
-
-<div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="exampleModalLabel">Post Job</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
-            <form class="mt-2" method="POST" action="{{ route('postjob') }}">
-                @csrf
-
-                <div class="row mb-3">
-                    <label for="title" class="col-md-4 col-form-label text-md-end">{{ __('Title') }}</label>
-
-                    <div class="col-md-6">
-                        <input id="title" type="text"
-                            class="form-control @error('title') is-invalid @enderror" name="title"
-                            value="{{ old('title') }}" autocomplete="title" autofocus>
-
-                        @error('title')
-                            <span class="invalid-feedback" role="alert">
-                                <strong>{{ $message }}</strong>
-                            </span>
-                        @enderror
-                    </div>
-                </div>
-
-                <div class="row mb-3">
-                    <label for="department"
-                        class="col-md-4 col-form-label text-md-end">{{ __('Department') }}</label>
-
-                    <div class="col-md-6">
-                        <input id="department" type="text"
-                            class="form-control @error('department') is-invalid @enderror" name="department"
-                            value="{{ old('department') }}" autocomplete="department" autofocus>
-
-                        @error('department')
-                            <span class="invalid-feedback" role="alert">
-                                <strong>{{ $message }}</strong>
-                            </span>
-                        @enderror
-                    </div>
-                </div>
-
-                <div class="row mb-3">
-                    <label for="type" class="col-md-4 col-form-label text-md-end">{{ __('Type') }}</label>
-                    <div class="col-md-6">
-                        <input id="type" type="text" class="form-control @error('type') is-invalid @enderror"
-                            name="type" value="{{ old('type') }}" autocomplete="type" autofocus>
-
-                        @error('type')
-                            <span class="invalid-feedback" role="alert">
-                                <strong>{{ $message }}</strong>
-                            </span>
-                        @enderror
-                    </div>
-                </div>
-                <div class="row mb-3">
-                    <label for="description"
-                        class="col-md-4 col-form-label text-md-end">{{ __('Description') }}</label>
-                    <div class="col-md-6">
-                        <textarea rows="2" id="description" type="text"
-                            class="form-control @error('description') is-invalid @enderror" name="description"
-                            value="{{ old('description') }}" autocomplete="description" autofocus></textarea>
-
-                        @error('description')
-                            <span class="invalid-feedback" role="alert">
-                                <strong>{{ $message }}</strong>
-                            </span>
-                        @enderror
-                    </div>
-                </div>
-
-                <div class="row mb-3">
-                    <label for="start_date"
-                        class="col-md-4 col-form-label text-md-end">{{ __('Start Date') }}</label>
-
-                    <div class="col-md-6">
-                        <input id="start_date" type="date"
-                            class="form-control @error('start_date') is-invalid @enderror" name="start_date"
-                            autocomplete="current-date" autofocus>
-
-                        @error('start_date')
-                            <span class="invalid-feedback" role="alert">
-                                <strong>{{ $message }}</strong>
-                            </span>
-                        @enderror
-                    </div>
-                </div>
-
-                <div class="row mb-3">
-                    <label for="end_date" class="col-md-4 col-form-label text-md-end">{{ __('End Date') }}</label>
-
-                    <div class="col-md-6">
-                        <input id="end_date" type="date"
-                            class="form-control @error('end_date') is-invalid @enderror" name="end_date"
-                            autocomplete="current-date" autofocus>
-
-                        @error('end_date')
-                            <span class="invalid-feedback" role="alert">
-                                <strong>{{ $message }}</strong>
-                            </span>
-                        @enderror
-                    </div>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                    <button type="submit" class="btn btn-primary"> {{ __('Post') }}</button>
-                </div>
-            </form>
-        </div>
-
-    </div>
-</div>
 </div>
 
 </html>

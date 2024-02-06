@@ -18,6 +18,7 @@ return new class extends Migration
             $table->bigInteger('employee_id')->unsigned();
             $table->bigInteger('leave_type_id')->unsigned();
             $table->integer('balance');
+            $table->softDeletes();
             $table->timestamps();
 
             $table->foreign('employee_id')->references('id')->on('employee')->onDelete('cascade');

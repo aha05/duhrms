@@ -20,6 +20,7 @@ return new class extends Migration
             $table->string('healthcare');
             $table->integer('vacation');
             $table->string('retirement');
+            $table->softDeletes();
             $table->timestamps();
         });
     }

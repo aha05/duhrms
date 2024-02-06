@@ -15,7 +15,7 @@ return new class extends Migration
     {
         Schema::create('job_post', function (Blueprint $table) {
             $table->id();
-            $table->string('code')->default('DJB'.mt_rand(100, 10000000));
+            $table->string('code')->nullable();
             $table->String('title');
             $table->string('department');
             $table->string('type')->default('Full Time');

@@ -4,14 +4,17 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
+use Carbon\Carbon;
 
 class Employee extends Model
 {
     use HasFactory;
+    use SoftDeletes;
 
     protected $table = "employee";
 
-    protected $fillable =[
+    protected $fillable = [
         'person_id',
         'department_id',
         'emp_id',
@@ -21,7 +24,13 @@ class Employee extends Model
         'employment_type',
         'date_of_hire',
         'location',
+        'status',
     ];
+
+    protected $casts = [
+        'date_of_hire' => 'datetime',
+    ];
+
 
     public function person()
     {
@@ -45,7 +54,7 @@ class Employee extends Model
 
     public function benefit()
     {
-        return $this->hasOne(Benefit::class , 'employee_id');
+        return $this->hasOne(Benefit::class, 'employee_id');
     }
 
     public function compensation()
@@ -60,7 +69,7 @@ class Employee extends Model
 
     public function user()
     {
-        return $this->hasOne(User::class, 'id');
+        return $this->hasOne(User::class, 'employee_id');
     }
 
     public function leave()

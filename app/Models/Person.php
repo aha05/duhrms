@@ -4,10 +4,12 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Person extends Model
 {
     use HasFactory;
+    use SoftDeletes;
 
     protected $table = "people";
 
@@ -31,6 +33,10 @@ class Person extends Model
         'date_of_registration',
     ];
 
+    protected $casts = [
+        'DOB' => 'datetime',
+        'date_of_registration' => 'datetime',
+    ];
 
     public function employee()
     {

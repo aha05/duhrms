@@ -22,6 +22,7 @@ return new class extends Migration
             $table->string('level');
             $table->integer('year_of_graduation');
             $table->double('GPA', 3, 2);
+            $table->softDeletes();
             $table->timestamps();
         });
     }

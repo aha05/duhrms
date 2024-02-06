@@ -28,34 +28,12 @@
     <link href="{{ asset('assets/css/style.css') }}" rel="stylesheet">
     <link href="{{ asset('assets/contact.css') }}" rel="stylesheet">
 
-    <!-- Scripts -->
-    <script src="{{ asset('js/bootstraps.js') }}"></script>
-    <script src="{{ asset('toaster/jquery-1.91.js') }}"></script>
-    <script src="{{ asset('toaster/jquery-migrate.js') }}"></script>
-    <link href="{{ asset('toaster/toaster.css') }}" rel="stylesheet" />
-    <script src="{{ asset('toaster/toaster.js') }}"></script>
-
-    <!-- Scripts -->
-    <script src="{{ asset('js/bootstraps.js') }}"></script>
-    <script src="{{ asset('toaster/jquery-1.91.js') }}"></script>
-    <script src="{{ asset('toaster/jquery-migrate.js') }}"></script>
-    <link href="{{ asset('toaster/toaster.css') }}" rel="stylesheet" />
-    <script src="{{ asset('toaster/toaster.js') }}"></script>
 
 </head>
 
 <body>
-    <link rel="stylesheet" href="{{ asset('css/styles.css') }}">
-    @if (session()->has('error'))
-        <script>
-            toastr.error('{{ session('error') }}');
-        </script>
-    @endif
-    @if (session()->has('success'))
-        <script>
-            toastr.success('{{ session('success') }}');
-        </script>
-    @endif
+    {{-- <link rel="stylesheet" href="{{ asset('css/styles.css') }}"> --}}
+
     <!-- ======= Header ======= -->
     <header id="header" class="fixed-top d-flex align-items-center">
         <div class="container d-flex justify-content-between align-items-center">
@@ -122,10 +100,9 @@
                     <div class="form">
 
                         <div class="contact-info">
-                            <h3 class="title">Let's get in touch</h3>
+                            <h3 class="title">Caution!</h3>
                             <p class="text">
-                                Lorem ipsum dolor sit, amet consectetur adipisicing elit. Iusto
-                                consequuntur culpa animi corrupti dolorum quod.
+                                Please! fill form with approprate information.
                             </p>
 
                             <div class="info">
@@ -148,20 +125,27 @@
                         <div class="contact-form">
                             <div class="circle one"></div>
                             <div class="circle two"></div>
-
-                            <form method="POST" action="{{ route('applyjob') }}">
+                            @if (session()->has('success'))
+                                <div class="alert alert-success">{{ session('success') }}</div>
+                            @elseif (session()->has('error'))
+                                <div class="alert alert-danger">{{ session('error') }}</div>
+                            @else
+                            @endif
+                            <form method="POST" action="{{ route('applyjobs') }}" enctype="multipart/form-data">
                                 @csrf
                                 <section id="demo" style="visibility: hidden;">
                                     <div class="spinner spinner--steps icon-spinner" aria-hidden="true"></div>
                                 </section>
+                                <input type="text" name="jobId" value="{{ $job->id }}" style="display: none">
                                 <div class="row mb-3">
                                     <label for="first_name"
                                         class="col-md-3 col-form-label text-md-end text-light">{{ __('First Name') }}</label>
 
                                     <div class="col-md-7">
                                         <input id="first_name" type="text"
-                                            class="input form-control @error('first_name') is-invalid @enderror" name="first_name"
-                                            value="{{ old('first_name') }}" autocomplete="first_name" autofocus>
+                                            class="input form-control @error('first_name') is-invalid @enderror"
+                                            name="first_name" value="{{ old('first_name') }}"
+                                            autocomplete="first_name" autofocus>
 
                                         @error('first_name')
                                             <span class="invalid-feedback" role="alert">
@@ -176,8 +160,9 @@
 
                                     <div class="col-md-7">
                                         <input id="last_name" type="text"
-                                            class="input form-control @error('last_name') is-invalid @enderror" name="last_name"
-                                            value="{{ old('last_name') }}" autocomplete="last_name" autofocus>
+                                            class="input form-control @error('last_name') is-invalid @enderror"
+                                            name="last_name" value="{{ old('last_name') }}" autocomplete="last_name"
+                                            autofocus>
 
                                         @error('last_name')
                                             <span class="invalid-feedback" role="alert">
@@ -193,8 +178,9 @@
 
                                     <div class="col-md-7">
                                         <input id="email" type="email"
-                                            class="input form-control @error('email') is-invalid @enderror" name="email"
-                                            value="{{ old('email') }}" autocomplete="email" autofocus>
+                                            class="input form-control @error('email') is-invalid @enderror"
+                                            name="email" value="{{ old('email') }}" autocomplete="email"
+                                            autofocus>
 
                                         @error('email')
                                             <span class="invalid-feedback" role="alert">
@@ -209,8 +195,8 @@
 
                                     <div class="col-md-7">
                                         <input id="age" type="text"
-                                            class="input form-control @error('age') is-invalid @enderror" name="age"
-                                            value="{{ old('age') }}" autocomplete="age" autofocus>
+                                            class="input form-control @error('age') is-invalid @enderror"
+                                            name="age" value="{{ old('age') }}" autocomplete="age" autofocus>
 
                                         @error('age')
                                             <span class="invalid-feedback" role="alert">
@@ -222,12 +208,17 @@
 
                                 <div class="row mb-3">
                                     <label for="sex"
-                                        class="col-md-3 col-form-label text-md-end text-light">{{ __('Sex') }}</label>
+                                        class="col-md-3 col-form-label text-md-end text-light">{{ __('Gender') }}</label>
 
                                     <div class="col-md-7">
-                                        <input id="sex" type="text"
-                                            class="input form-control @error('sex') is-invalid @enderror" name="sex"
-                                            value="{{ old('sex') }}" autocomplete="sex" autofocus>
+                                        <select id="sex" type="text"
+                                            class="input form-control @error('sex') is-invalid @enderror"
+                                            name="sex" value="{{ old('sex') }}" autocomplete="sex" autofocus>
+                                            <option value="">Select Gender</option>
+                                            <option value="Male">Male</option>
+                                            <option value="Female">Female</option>
+                                            <option value="Other">Other</option>
+                                        </select>
 
                                         @error('sex')
                                             <span class="invalid-feedback" role="alert">
@@ -242,8 +233,9 @@
 
                                     <div class="col-md-7">
                                         <input id="phone" type="text"
-                                            class="input form-control @error('phone') is-invalid @enderror" name="phone"
-                                            value="{{ old('phone') }}" autocomplete="phone" autofocus>
+                                            class="input form-control @error('phone') is-invalid @enderror"
+                                            name="phone" value="{{ old('phone') }}" autocomplete="phone"
+                                            autofocus>
 
                                         @error('phone')
                                             <span class="invalid-feedback" role="alert">
@@ -257,9 +249,15 @@
                                         class="col-md-3 col-form-label text-md-end text-light">{{ __('Level') }}</label>
 
                                     <div class="col-md-7">
-                                        <input id="level" type="text"
-                                            class="input form-control @error('level') is-invalid @enderror" name="level"
-                                            value="{{ old('level') }}" autocomplete="level" autofocus>
+                                        <select id="level" type="text"
+                                            class="input form-control @error('level') is-invalid @enderror"
+                                            name="level" value="{{ old('level') }}" autocomplete="level"
+                                            autofocus>
+                                            <option value="">Select Level</option>
+                                            <option value="Bsc.">Bsc.</option>
+                                            <option value="Msc.">Msc.</option>
+                                            <option value="Phd.">Phd.</option>
+                                        </select>
 
                                         @error('level')
                                             <span class="invalid-feedback" role="alert">
@@ -275,8 +273,9 @@
 
                                     <div class="col-md-7">
                                         <input id="GPA" type="text"
-                                            class="input form-control @error('GPA') is-invalid @enderror" name="GPA"
-                                            value="{{ old('GPA') }}" autocomplete="first_name" autofocus>
+                                            class="input form-control @error('GPA') is-invalid @enderror"
+                                            name="GPA" value="{{ old('GPA') }}" autocomplete="first_name"
+                                            autofocus>
 
                                         @error('GPA')
                                             <span class="invalid-feedback" role="alert">
@@ -292,8 +291,9 @@
 
                                     <div class="col-md-7">
                                         <input id="attachment" type="file"
-                                            class="input form-control @error('attachment') is-invalid @enderror" name="attachment"
-                                            value="{{ old('attachment') }}" autocomplete="attachment" autofocus>
+                                            class="input form-control @error('attachment') is-invalid @enderror"
+                                            name="attachment" value="{{ old('attachment') }}"
+                                            autocomplete="attachment" autofocus>
 
                                         @error('attachment')
                                             <span class="invalid-feedback" role="alert">
@@ -309,8 +309,9 @@
 
                                     <div class="col-md-7">
                                         <input id="numberofdoc" type="number"
-                                            class="input form-control @error('numberofdoc') is-invalid @enderror" name="numberofdoc"
-                                            value="{{ old('numberofdoc') }}" autocomplete="numberofdoc" autofocus>
+                                            class="input form-control @error('numberofdoc') is-invalid @enderror"
+                                            name="numberofdoc" value="{{ old('numberofdoc') }}"
+                                            autocomplete="numberofdoc" autofocus>
 
                                         @error('numberofdoc')
                                             <span class="invalid-feedback" role="alert">
@@ -325,9 +326,8 @@
                                         class="col-md-3 col-form-label text-md-end text-light">{{ __('Remark') }}</label>
 
                                     <div class="col-md-7">
-                                        <textarea id="remark" type="text"
-                                            class="input form-control @error('remark') is-invalid @enderror" name="remark"
-                                            value="{{ old('remark') }}" autocomplete="remark" autofocus rows="3"></textarea>
+                                        <textarea id="remark" type="text" class="input form-control @error('remark') is-invalid @enderror"
+                                            name="remark" value="{{ old('remark') }}" autocomplete="remark" autofocus rows="3"></textarea>
 
                                         @error('remark')
                                             <span class="invalid-feedback" role="alert">
@@ -370,7 +370,7 @@
                     document.getElementById("demo").style.visibility = 'hidden';
                 }
             };
-            xhttp.open("POST", "{{ route('applyjob') }}");
+            xhttp.open("POST", "{{ route('applyjobs') }}");
             xhttp.send();
         }
     </script>

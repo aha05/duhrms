@@ -20,6 +20,7 @@ return new class extends Migration
             $table->string('approved_at');
             $table->string('status')->default('pending');
             $table->text('comments');
+            $table->softDeletes();
             $table->timestamps();
 
             $table->foreign('vacancy_request_id')->references('id')->on('vacancy_requests')->onDelete('cascade');
